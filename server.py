@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, Response, make_response
 
 import cv2
 import numpy as np
+import json
 
 from face_matcher import LANDMARK_MATCHING
 
@@ -17,7 +18,7 @@ def processFace():
     # Get image from the post request.
     f = request.files['image']
     img = cv2.imdecode(np.frombuffer(request.files['image'].read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    cv2.imwrite('test.png',img)
+    #cv2.imwrite('test.png',img)
 
     # Process landmark detection.
     res = detector.landmark_part_matching(img)
@@ -25,16 +26,33 @@ def processFace():
     # Return if no face detected.
     if len(res) == 0:
       return {'status':'fail','message':'No face detected'}    
-      #return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': '[{\"id\":0,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":1,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":2,\"num\":0,\"rotation\":10,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":3,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":4,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":5,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":6,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0}]'}
-    
+      
+
+    # Make json result
+    # TODO add rotation, scale, translation value
+    data = []
+    for i, num in enumerate(res):
+        data.append({"id":int(i), "num":int(num), "rotation":0, "faceScaleX":1.0, "faceScaleY":1.0, "facetransX":0, "facetransY":0})
+
     # Return status
-    return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': '[{\"id\":0,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":1,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":2,\"num\":0,\"rotation\":10,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":3,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":4,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":5,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":6,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0}]'}
+    #return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': '[{\"id\":0,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":1,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":2,\"num\":0,\"rotation\":10,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":3,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":4,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":5,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":6,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0}]'}
+    return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': json.dumps(data)}
 
 
 
 @app.route('/finalize', methods=['POST'])
 def finalize():
     print(request)
+    json_data = request.json
+
+    res = []
+    # TODO parse json (check not done)
+    for data in json_data["data"]:
+        res.append({"id":data["id"], "num":data["num"], "rotation":data["rotation"], "faceScaleX":data["faceScaleX"], "faceScaleY":data["faceScaleY"], "facetransX":data["facetransX"], "facetransY":data["facetransY"]})
+
+
+    # TODO store finalized values
+
 
 
 

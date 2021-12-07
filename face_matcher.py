@@ -110,7 +110,7 @@ class LANDMARK_MATCHING (LANDMARK_points):
       print("Right_eye_b_id", res_right_eye_b_id)
       print("Nose_id", res_nose_id)
       print("Mouth_id", res_mouth_id)
-      return [res_face_contour_id, res_left_eye_id,  res_right_eye_id, res_left_eye_b_id, res_right_eye_b_id, res_nose_id, res_mouth_id]
+      return [res_face_contour_id, res_nose_id, res_left_eye_id,  res_right_eye_id, res_left_eye_b_id, res_right_eye_b_id, res_mouth_id]
     
     else:
       return []
