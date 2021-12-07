@@ -20,7 +20,7 @@ def processFace():
     cv2.imwrite('test.png',img)
 
     # Process landmark detection.
-    res = detector.landmark_part_matching(image)
+    res = detector.landmark_part_matching(img)
 
     # Return if no face detected.
     if len(res) == 0:
