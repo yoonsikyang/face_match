@@ -14,7 +14,7 @@ app = Flask(__name__)
 @app.route('/processFace', methods=['POST'])
 def processFace():
     r = request
-    
+
     # Get image from the post request.
     f = request.files['image']
     img = cv2.imdecode(np.frombuffer(request.files['image'].read(), np.uint8), cv2.IMREAD_UNCHANGED)
@@ -25,14 +25,14 @@ def processFace():
 
     # Return if no face detected.
     if len(res) == 0:
-      return {'status':'fail','message':'No face detected'}    
-      
+      return {'status':'fail','message':'No face detected'}
+
 
     # Make json result
     # TODO add rotation, scale, translation value
     data = []
     for i, num in enumerate(res):
-        data.append({"id":int(i), "num":int(num), "rotation":0, "faceScaleX":1.0, "faceScaleY":1.0, "facetransX":0, "facetransY":0})
+        data.append({"id":int(i), "num":int(num), "rotation":0, "scaleX":1.0, "scaleY":1.0, "transX":0, "transY":0})
 
     # Return status
     #return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': '[{\"id\":0,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":1,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":2,\"num\":0,\"rotation\":10,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":3,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":4,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":5,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":6,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0}]'}
@@ -42,24 +42,28 @@ def processFace():
 
 @app.route('/finalize', methods=['POST'])
 def finalize():
-    print(request)
-    json_data = request.json
-
+    json_data = request.get_json()
+    print(json_data)
     res = []
-    # TODO parse json (check not done)
-    for data in json_data["data"]:
-        res.append({"id":data["id"], "num":data["num"], "rotation":data["rotation"], "faceScaleX":data["faceScaleX"], "faceScaleY":data["faceScaleY"], "facetransX":data["facetransX"], "facetransY":data["facetransY"]})
-
+    # Parse json from device
+    for data in json_data:
+        res.append({"id":data["id"], "num":data["num"], "rotation":data["rotation"], "scaleX":data["scaleX"], "scaleY":data["scaleY"], "transX":data["transX"], "transY":data["transY"]})
 
     # TODO store finalized values
+    
+
+
+    return {'status':'success'}
 
 
 
 
 if __name__ == '__main__':
     try:
-        app.run(host='0.0.0.0', port=19999)
+        app.run(host='0.0.0.0', port=5000)
     except KeyboardInterrupt:
         pass
-    
+
     exit()
+
+
