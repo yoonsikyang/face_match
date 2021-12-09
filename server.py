@@ -32,10 +32,9 @@ def processFace():
     # TODO add rotation, scale, translation value
     data = []
     for i, num in enumerate(res):
-        data.append({"id":int(i), "num":int(num), "rotation":0, "scaleX":1.0, "scaleY":1.0, "transX":0, "transY":0})
+        data.append({"type":int(i), "asset_id":int(num), "rotation":0, "h_scale":1.0, "v_scale":1.0, "h_trans":0, "v_trans":0})
 
     # Return status
-    #return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': '[{\"id\":0,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":1,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":2,\"num\":0,\"rotation\":10,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":3,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":4,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":5,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0},{\"id\":6,\"num\":0,\"rotation\":0,\"faceScaleX\":1.0,\"faceScaleY\":1.0,\"facetransX\":0,\"facetransY\":0}]'}
     return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': json.dumps(data)}
 
 
@@ -47,7 +46,7 @@ def finalize():
     res = []
     # Parse json from device
     for data in json_data:
-        res.append({"id":data["id"], "num":data["num"], "rotation":data["rotation"], "scaleX":data["scaleX"], "scaleY":data["scaleY"], "transX":data["transX"], "transY":data["transY"]})
+        res.append({"type":data["type"], "asset_id":data["asset_id"], "rotation":data["rotation"], "h_scale":data["h_scale"], "v_scale":data["v_scale"], "h_trans":data["h_trans"], "v_trans":data["v_trans"]})
 
     # TODO store finalized values
     
