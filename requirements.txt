@@ -1,5 +1,10 @@
 mediapipe
-flask
+#flask
 opencv-python
 planar
 scipy
+
+####################
+fastapi
+uvicorn[standard]
+python-multipart

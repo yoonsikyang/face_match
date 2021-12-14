@@ -1,25 +1,34 @@
-from flask import Flask, request, render_template, Response, make_response
+from typing import Optional
+
+from fastapi import FastAPI, File, UploadFile
 
 import cv2
 import numpy as np
 import json
+import time
 
 from face_matcher import LANDMARK_MATCHING
 
+from typing import List
+from pydantic import BaseModel
+
+class PartInfo(BaseModel):
+    type: int 
+    asset_id :int
+    rotation:float
+    h_scale:float
+    v_scale:float
+    h_trans:float
+    v_trans:float
+
+
+
+app = FastAPI()
 detector = LANDMARK_MATCHING()
 
-app = Flask(__name__)
 
 
-@app.route('/processFace', methods=['POST'])
-def processFace():
-    r = request
-
-    # Get image from the post request.
-    f = request.files['image']
-    img = cv2.imdecode(np.frombuffer(request.files['image'].read(), np.uint8), cv2.IMREAD_UNCHANGED)
-    #cv2.imwrite('test.png',img)
-
+async def process(img):
     # Process landmark detection.
     res = detector.landmark_part_matching(img)
 
@@ -27,42 +36,35 @@ def processFace():
     if len(res) == 0:
       return {'status':'fail','message':'No face detected'}
 
-
     # Make json result
     # TODO add rotation, scale, translation value
     data = []
     for i, num in enumerate(res):
         data.append({"type":int(i), "asset_id":int(num), "rotation":0, "h_scale":1.0, "v_scale":1.0, "h_trans":0, "v_trans":0})
-
-    # Return status
+    
     return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': json.dumps(data)}
 
 
+@app.post("/processFace")
+async def processFace(image: bytes = File(...)):
+    start = time.time()
 
-@app.route('/finalize', methods=['POST'])
-def finalize():
-    json_data = request.get_json()
-    print(json_data)
-    res = []
-    # Parse json from device
-    for data in json_data:
-        res.append({"type":data["type"], "asset_id":data["asset_id"], "rotation":data["rotation"], "h_scale":data["h_scale"], "v_scale":data["v_scale"], "h_trans":data["h_trans"], "v_trans":data["v_trans"]})
+    img = cv2.imdecode(np.frombuffer(image, np.uint8), cv2.IMREAD_UNCHANGED)
+    ret = await process(img)
+
+    print('time: ' + str(time.time()-start) + ' ')
+    return ret
+    
+
+
+
+@app.post("/finalize")
+async def finalize(data:List[PartInfo]):
+    for d in data:
+        print(f'{d.type} {d.asset_id} {d.rotation} {d.h_scale} {d.v_scale} {d.h_trans} {d.v_trans} ')
 
     # TODO store finalized values
     
 
 
     return {'status':'success'}
-
-
-
-
-if __name__ == '__main__':
-    try:
-        app.run(host='0.0.0.0', port=5000)
-    except KeyboardInterrupt:
-        pass
-
-    exit()
-
-
