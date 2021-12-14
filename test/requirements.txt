@@ -1,0 +1,10 @@
+mediapipe
+#flask
+opencv-python
+planar
+scipy
+
+####################
+fastapi
+uvicorn[standard]
+python-multipart
