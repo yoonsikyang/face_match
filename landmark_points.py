@@ -60,7 +60,7 @@ class LANDMARK_points:
     TRANSFORM_Asset_1_MOUTH = [(193, 395), (251, 384), (312, 394), (250, 429)] 
 
     ############################################################################################################################################################################################################
-
+    """
     self.input_Face_contour = []
     self.input_left_eye = []
     self.input_right_eye = []
@@ -76,7 +76,15 @@ class LANDMARK_points:
     self.transform_input_right_eye_b = []
     self.transform_input_nose = []
     self.transform_input_mouth = []
-
+    
+    self.Face_contour=[]
+    self.Nose=[]
+    self.L_Eye = []
+    self.R_Eye = []
+    self.L_Eye_b = []
+    self.R_Eye_b = []
+    self.Mouth = []
+    """
     self.Asset_Face_contours = []
     self.Asset_left_eyes = []
     self.Asset_right_eyes = []
@@ -92,13 +100,6 @@ class LANDMARK_points:
     self.Asset_transform_nose = []
     self.Asset_transform_mouths = []
 
-    self.Face_contour=[]
-    self.Nose=[]
-    self.L_Eye = []
-    self.R_Eye = []
-    self.L_Eye_b = []
-    self.R_Eye_b = []
-    self.Mouth = []
     
     for i in range(self.Asset_size):
       # Total landmark
