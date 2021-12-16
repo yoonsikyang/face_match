@@ -54,14 +54,14 @@ async def processFace(image: bytes = File(...)):
 
     print('time: ' + str(time.time()-start) + ' ')
     return ret
-    
+
 
 
 
 @app.post("/finalize")
 async def finalize(data:List[PartInfo]):
     for d in data:
-        print(f'{d.type} {d.asset_id} {d.rotation} {d.h_scale} {d.v_scale} {d.h_trans} {d.v_trans} ')
+        print(f'{d.type} {d.asset_id} {d.rotation} {d.h_scale} {d.v_scale} {d.h_trans} {d.v_trans}')
 
     # TODO store finalized values
     
