@@ -26,6 +26,7 @@ class LANDMARK_MATCHING (LANDMARK_points):
   def __init__(self):
     self.mp_face_mesh = mp.solutions.mediapipe.python.solutions.face_mesh
     self._landmarks = LANDMARK_points()
+    self.scale = 500.0/602.0
     self.face_mesh =  self.mp_face_mesh.FaceMesh(
         static_image_mode=True,
         max_num_faces=1,
@@ -117,7 +118,7 @@ class LANDMARK_MATCHING (LANDMARK_points):
     input_center_x, input_center_y = self.getCenter(input_bbox)
     asset_center_x, asset_center_y = self.getCenter(asset_bbox)
 
-    return input_angle-asset_angle, input_w_dist/asset_w_dist, input_h_dist/asset_h_dist, asset_center_x-input_center_x, asset_center_y-input_center_y
+    return (input_angle-asset_angle)*self.scale, (input_w_dist/asset_w_dist)*self.scale, (input_h_dist/asset_h_dist)*self.scale, (asset_center_x-input_center_x)*self.scale, (asset_center_y-input_center_y)*self.scale
   
   def value_to_list(self, lists, Angle, w_scale, h_scale, w_trans, h_trans):
     lists.append(Angle)
