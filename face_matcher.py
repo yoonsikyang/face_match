@@ -27,6 +27,7 @@ class LANDMARK_MATCHING (LANDMARK_points):
     self.mp_face_mesh = mp.solutions.mediapipe.python.solutions.face_mesh
     self._landmarks = LANDMARK_points()
     self.scale = 500.0/602.0
+    print(self.scale)
     self.face_mesh =  self.mp_face_mesh.FaceMesh(
         static_image_mode=True,
         max_num_faces=1,
@@ -117,8 +118,8 @@ class LANDMARK_MATCHING (LANDMARK_points):
     
     input_center_x, input_center_y = self.getCenter(input_bbox)
     asset_center_x, asset_center_y = self.getCenter(asset_bbox)
-
-    return (input_angle-asset_angle)*self.scale, (input_w_dist/asset_w_dist)*self.scale, (input_h_dist/asset_h_dist)*self.scale, (asset_center_x-input_center_x)*self.scale, (asset_center_y-input_center_y)*self.scale
+    #return input_angle-asset_angle, (input_w_dist/asset_w_dist)*self.scale, (input_h_dist/asset_h_dist)*self.scale, (asset_center_x-input_center_x)*self.scale, (asset_center_y-input_center_y)*self.scale
+    return input_angle-asset_angle, (input_w_dist/asset_w_dist), (input_h_dist/asset_h_dist), (asset_center_x-input_center_x), (asset_center_y-input_center_y)
   
   def value_to_list(self, lists, Angle, w_scale, h_scale, w_trans, h_trans):
     lists.append(Angle)
@@ -206,7 +207,8 @@ class LANDMARK_MATCHING (LANDMARK_points):
     self.value_to_list(Face_contour, 0.0, 1.0, 1.0, 0.0, 0.0)
 
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_nose, self._landmarks.Asset_transform_nose, Nose_ID, 'NOSE')
-    self.value_to_list(Nose, Angle, h_scale, v_scale, h_trans, v_trans)
+    #self.value_to_list(Nose, Angle, h_scale, v_scale, h_trans, v_trans)
+    self.value_to_list(Nose, Angle, h_scale, v_scale, 0, v_trans)
     
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_left_eye, self._landmarks.Asset_transform_left_eyes, Eye_ID, 'LEFT_EYE')
     self.value_to_list(L_Eye, Angle, h_scale, v_scale, h_trans, v_trans)
@@ -221,7 +223,8 @@ class LANDMARK_MATCHING (LANDMARK_points):
     self.value_to_list(R_Eye_b, Angle, h_scale, v_scale, h_trans, v_trans)
 
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_mouth, self._landmarks.Asset_transform_mouths, Mouth_ID, 'MOUTH')
-    self.value_to_list(Mouth, Angle, h_scale, v_scale, h_trans, v_trans)
+    #self.value_to_list(Mouth, Angle, h_scale, v_scale, h_trans, v_trans)
+    self.value_to_list(Mouth, Angle, h_scale, v_scale, 0, v_trans)
     
     transform_ = (Face_contour, Nose, L_Eye, R_Eye, L_Eye_b, R_Eye_b, Mouth)
     return [Face_contour_ID, Nose_ID, Eye_ID,  Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_

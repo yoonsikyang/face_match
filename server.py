@@ -29,6 +29,7 @@ detector = LANDMARK_MATCHING()
 
 
 async def process(img):
+    
     # Process landmark detection.
     res, transform  = detector.landmark_part_matching(img)
 
@@ -41,6 +42,8 @@ async def process(img):
     data = []
     for i, num in enumerate(res):
         data.append({"type":int(i), "asset_id":int(num), "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":transform[i][3], "v_trans":transform[i][4]})
+        #data.append({"type":int(i), "asset_id":int(num), "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":0, "v_trans":0})
+
     
     return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': json.dumps(data)}
 
