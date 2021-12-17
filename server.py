@@ -1,16 +1,16 @@
-from typing import Optional
-
-from fastapi import FastAPI, File, UploadFile
-
+import os
 import cv2
 import numpy as np
 import json
 import time
 
+from typing import Optional,List
+from fastapi import FastAPI, File, UploadFile
+from pydantic import BaseModel
+
 from face_matcher import LANDMARK_MATCHING
 
-from typing import List
-from pydantic import BaseModel
+
 
 class PartInfo(BaseModel):
     type: int 
@@ -29,13 +29,12 @@ detector = LANDMARK_MATCHING()
 
 
 async def process(img):
-    
     # Process landmark detection.
     res, transform  = detector.landmark_part_matching(img)
 
     # Return if no face detected.
     if len(res) == 0:
-      return {'status':'fail','message':'No face detected'}
+        return {'status':'fail','message':'No face detected'}
 
     # Make json result
     # TODO add rotation, scale, translation value
@@ -53,6 +52,7 @@ async def processFace(image: bytes = File(...)):
     start = time.time()
 
     img = cv2.imdecode(np.frombuffer(image, np.uint8), cv2.IMREAD_UNCHANGED)
+
     ret = await process(img)
 
     print('time: ' + str(time.time()-start) + ' ')

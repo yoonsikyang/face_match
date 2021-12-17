@@ -3,6 +3,7 @@ mediapipe
 opencv-python
 planar
 scipy
+docopt
 
 ####################
 fastapi

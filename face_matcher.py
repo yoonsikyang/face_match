@@ -22,12 +22,13 @@ from planar import BoundingBox
 from landmark_points import LANDMARK_points
 
 
-class LANDMARK_MATCHING (LANDMARK_points):
+class LANDMARK_MATCHING(LANDMARK_points):
   def __init__(self):
     self.mp_face_mesh = mp.solutions.mediapipe.python.solutions.face_mesh
     self._landmarks = LANDMARK_points()
-    self.scale = 500.0/602.0
-    print(self.scale)
+    
+    self.size = (600, 500)
+    
     self.face_mesh =  self.mp_face_mesh.FaceMesh(
         static_image_mode=True,
         max_num_faces=1,
@@ -43,6 +44,14 @@ class LANDMARK_MATCHING (LANDMARK_points):
   def get_landmark_point(self, lm, ih, iw ):
     x, y = int(lm.x * iw), int(lm.y * ih)
     return (x, y)
+
+  def get_landmark_points(self, lms, ih, iw):
+    points = []
+    for p in lms:
+      x, y = int(p.x * iw), int(p.y * ih)
+      pp  = [x, y] 
+      points.append(pp)
+    return np.array(points)
 
   def landmark_pointSet_matching(self, asset_, input_):    
     res = []
@@ -88,6 +97,104 @@ class LANDMARK_MATCHING (LANDMARK_points):
   
     return x, y
 
+  def positive_cap(self, num):
+    """ Cap a number to ensure positivity
+
+    :param num: positive or negative number
+    :returns: (overflow, capped_number)
+    """
+    if num < 0:
+      return 0, abs(num)
+    else:
+      return num, 0
+
+  def roi_coordinates(self, rect, size, scale):
+    """ Align the rectangle into the center and return the top-left coordinates
+    within the new size. If rect is smaller, we add borders.
+
+    :param rect: (x, y, w, h) bounding rectangle of the face
+    :param size: (width, height) are the desired dimensions
+    :param scale: scaling factor of the rectangle to be resized
+    :returns: 4 numbers. Top-left coordinates of the aligned ROI.
+      (x, y, border_x, border_y). All values are > 0.
+    """
+    rectx, recty, rectw, recth = rect
+    new_height, new_width = size
+    mid_x = int((rectx + rectw/2) * scale)
+    mid_y = int((recty + recth/2) * scale)
+    roi_x = mid_x - int(new_width/2)
+    roi_y = mid_y - int(new_height/2)
+
+    roi_x, border_x = self.positive_cap(roi_x)
+    roi_y, border_y = self.positive_cap(roi_y)
+    return roi_x, roi_y, border_x, border_y
+
+  def scaling_factor(self, rect, size):
+    """ Calculate the scaling factor for the current image to be
+        resized to the new dimensions
+
+    :param rect: (x, y, w, h) bounding rectangle of the face
+    :param size: (width, height) are the desired dimensions
+    :returns: floating point scaling factor
+    """
+    new_height, new_width = size
+    rect_h, rect_w = rect[2:]
+    height_ratio = rect_h / new_height
+    width_ratio = rect_w / new_width
+    scale = 1
+    if height_ratio > width_ratio:
+      new_recth = 0.8 * new_height
+      scale = new_recth / rect_h
+    else:
+      new_rectw = 0.8 * new_width
+      scale = new_rectw / rect_w
+    return scale
+
+  def resize_image(self, img, scale):
+    """ Resize image with the provided scaling factor
+
+    :param img: image to be resized
+    :param scale: scaling factor for resizing the image
+    """
+    cur_height, cur_width = img.shape[:2]
+    new_scaled_height = int(scale * cur_height)
+    new_scaled_width = int(scale * cur_width)
+
+    return cv2.resize(img, (new_scaled_width, new_scaled_height))
+
+  def resize_align(self, img, points, size):
+    """ Resize image and associated points, align face to the center
+      and crop to the desired size
+
+    :param img: image to be resized
+    :param points: *m* x 2 array of points
+    :param size: (height, width) tuple of new desired size
+    """
+    new_height, new_width = size
+
+    # Resize image based on bounding rectangle
+    rect = cv2.boundingRect(np.array([points], np.int32))
+    scale = self.scaling_factor(rect, size)
+    img = self.resize_image(img, scale)
+
+    # Align bounding rect to center
+    cur_height, cur_width = img.shape[:2]
+    roi_x, roi_y, border_x, border_y = self.roi_coordinates(rect, size, scale)
+    roi_h = np.min([new_height-border_y, cur_height-roi_y])
+    roi_w = np.min([new_width-border_x, cur_width-roi_x])
+
+    # Crop to supplied size
+    crop = np.zeros((new_height, new_width, 3), img.dtype)
+    crop[border_y:border_y+roi_h, border_x:border_x+roi_w] = (
+      img[roi_y:roi_y+roi_h, roi_x:roi_x+roi_w])
+
+    # Scale and align face points to the crop
+    points[:, 0] = (points[:, 0] * scale) + (border_x - roi_x)
+    points[:, 1] = (points[:, 1] * scale) + (border_y - roi_y)
+
+    return (crop, points)
+
+
   def get_transform(self, input_, asset_, idx, mode):
 
     if mode == 'LEFT_EYE': input_pts = np.array([input_[3], input_[1], input_[2], input_[0]]) 
@@ -104,7 +211,6 @@ class LANDMARK_MATCHING (LANDMARK_points):
     asset_angle = self.getAngle_Dist_2P(asset_pts[0], asset_pts[2])
     asset_bbox = BoundingBox(asset_pts)
 
-
     if mode == 'LEFT_EYE' or mode == 'RIGHT_EYE' or mode == 'NOSE' or mode == 'MOUTH' :
       input_w_dist = self.euclidean_dist(input_pts[0], input_pts[2])
       input_h_dist = self.euclidean_dist(input_pts[1], input_pts[3])
@@ -118,7 +224,7 @@ class LANDMARK_MATCHING (LANDMARK_points):
     
     input_center_x, input_center_y = self.getCenter(input_bbox)
     asset_center_x, asset_center_y = self.getCenter(asset_bbox)
-    #return input_angle-asset_angle, (input_w_dist/asset_w_dist)*self.scale, (input_h_dist/asset_h_dist)*self.scale, (asset_center_x-input_center_x)*self.scale, (asset_center_y-input_center_y)*self.scale
+
     return input_angle-asset_angle, (input_w_dist/asset_w_dist), (input_h_dist/asset_h_dist), (asset_center_x-input_center_x), (asset_center_y-input_center_y)
   
   def value_to_list(self, lists, Angle, w_scale, h_scale, w_trans, h_trans):
@@ -142,8 +248,7 @@ class LANDMARK_MATCHING (LANDMARK_points):
     input_right_eye_b = []
     input_nose = []
     input_mouth = []
-     
-    
+
     transform_input_left_eye = []
     transform_input_right_eye = []
     transform_input_left_eye_b = []
@@ -154,37 +259,36 @@ class LANDMARK_MATCHING (LANDMARK_points):
     ih, iw, ic = input_image.shape
     if results.multi_face_landmarks:
       for faceLms in results.multi_face_landmarks:
-          for id, lm in enumerate(faceLms.landmark):            
-            if id in self._landmarks.FACE_CONTOUR : input_Face_contour.append(self.get_landmark_point(lm, ih, iw))
+          o_points = self.get_landmark_points(faceLms.landmark, ih, iw)
+          input_image, points = self.resize_align(input_image, o_points, self.size)
+
+          for id, lm in enumerate(points):
+            (x, y) = lm[0],lm[1]        
+            if id in self._landmarks.FACE_CONTOUR : input_Face_contour.append((x,y))
             if id in self._landmarks.LEFT_EYE : 
-              (x, y) = self.get_landmark_point(lm, ih, iw)
               input_left_eye.append((x, y))                
               if id in self._landmarks.TRANSFORM_LEFT_EYE : transform_input_left_eye.append((x, y))
               
             if id in self._landmarks.RIGHT_EYE : 
-              (x, y) = self.get_landmark_point(lm, ih, iw)
               input_right_eye.append((x, y))
               if id in self._landmarks.TRANSFORM_RIGHT_EYE : transform_input_right_eye.append((x, y))
 
             if id in self._landmarks.LEFT_EYE_B : 
-              (x, y) = self.get_landmark_point(lm, ih, iw)
               input_left_eye_b.append((x, y))
               if id in self._landmarks.TRANSFORM_LEFT_EYE_B : transform_input_left_eye_b.append((x, y))
               
             if id in self._landmarks.RIGHT_EYE_B : 
-              (x, y) = self.get_landmark_point(lm, ih, iw)
               input_right_eye_b.append((x, y))
               if id in self._landmarks.TRANSFORM_RIGHT_EYE_B : transform_input_right_eye_b.append((x, y))
 
             if id in self._landmarks.NOSE : 
-              (x, y) = self.get_landmark_point(lm, ih, iw)
               input_nose.append((x, y))
               if id in self._landmarks.TRANSFORM_NOSE : transform_input_nose.append((x, y))
 
             if id in self._landmarks.MOUTH : 
-              (x, y) = self.get_landmark_point(lm, ih, iw)
               input_mouth.append((x, y))
               if id in self._landmarks.TRANSFORM_MOUTH : transform_input_mouth.append((x, y))
+
 
     Face_contour_ID, _ = self.landmark_pointSet_matching(self._landmarks.Asset_Face_contours, input_Face_contour)
     _, res_l_eye = self.landmark_pointSet_matching(self._landmarks.Asset_left_eyes, input_left_eye)
@@ -207,7 +311,6 @@ class LANDMARK_MATCHING (LANDMARK_points):
     self.value_to_list(Face_contour, 0.0, 1.0, 1.0, 0.0, 0.0)
 
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_nose, self._landmarks.Asset_transform_nose, Nose_ID, 'NOSE')
-    #self.value_to_list(Nose, Angle, h_scale, v_scale, h_trans, v_trans)
     self.value_to_list(Nose, Angle, h_scale, v_scale, 0, v_trans)
     
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_left_eye, self._landmarks.Asset_transform_left_eyes, Eye_ID, 'LEFT_EYE')
@@ -223,9 +326,8 @@ class LANDMARK_MATCHING (LANDMARK_points):
     self.value_to_list(R_Eye_b, Angle, h_scale, v_scale, h_trans, v_trans)
 
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_mouth, self._landmarks.Asset_transform_mouths, Mouth_ID, 'MOUTH')
-    #self.value_to_list(Mouth, Angle, h_scale, v_scale, h_trans, v_trans)
     self.value_to_list(Mouth, Angle, h_scale, v_scale, 0, v_trans)
     
+
     transform_ = (Face_contour, Nose, L_Eye, R_Eye, L_Eye_b, R_Eye_b, Mouth)
     return [Face_contour_ID, Nose_ID, Eye_ID,  Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_
-
