@@ -319,13 +319,9 @@ class LANDMARK_MATCHING(LANDMARK_points):
     if Angle_l < Angle_r:
       self.value_to_list(L_Eye, Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l)
       self.value_to_list(R_Eye, -Angle_l, h_scale_l, v_scale_l, -h_trans_l, v_trans_l)
-      print(Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l)
-      print(-Angle_l, h_scale_l, v_scale_l, -h_trans_l, v_trans_l)
     else:
       self.value_to_list(L_Eye, -Angle_r, h_scale_r, v_scale_r, -h_trans_r, v_trans_r)
       self.value_to_list(R_Eye, Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r)
-      print(-Angle_r, h_scale_r, v_scale_r, -h_trans_r, v_trans_r)
-      print(Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r)
 
     Angle_l, v_scale_l, h_scale_l, v_trans_l, h_trans_l = self.get_transform(transform_input_left_eye_b, self._landmarks.Asset_transform_left_eyes_b, Eye_B_ID, 'LEFT_EYE_B')
     Angle_r, v_scale_r, h_scale_r, v_trans_r, h_trans_r = self.get_transform(transform_input_right_eye_b, self._landmarks.Asset_transform_right_eyes_b, Eye_B_ID, 'RIGHT_EYE_B')
