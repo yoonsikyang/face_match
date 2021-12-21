@@ -209,7 +209,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     elif mode == 'LEFT_EYE_B': input_pts = np.array([input_[0], input_[1], input_[2], input_[3]]) 
     elif mode == 'RIGHT_EYE_B': input_pts = np.array([input_[0], input_[1], input_[2], input_[3]])
     elif mode == 'NOSE': input_pts = np.array([input_[0], input_[1], input_[2], input_[3]]) 
-    elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[3], input_[4], input_[5], input_[1], input_[2]]) 
+    elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[1], input_[2], input_[3]])
 
     input_bbox = BoundingBox(input_pts)
     input_angle = self.getAngle_Dist_2P(input_pts[0], input_pts[2])
@@ -231,8 +231,8 @@ class LANDMARK_MATCHING(LANDMARK_points):
     elif mode == 'MOUTH':
       input_w_dist = self.euclidean_dist(input_pts[0], input_pts[2])
       input_h_dist = self.euclidean_dist(input_pts[1], input_pts[3]) #- (self.euclidean_dist(input_pts[5], input_pts[4]) /2)
-      asset_w_dist = self.euclidean_dist(asset_pts[0], asset_pts[4])
-      asset_h_dist = self.euclidean_dist(asset_pts[3], asset_pts[5])
+      asset_w_dist = self.euclidean_dist(asset_pts[0], asset_pts[2])
+      asset_h_dist = self.euclidean_dist(asset_pts[1], asset_pts[3])
 
     input_center_x, input_center_y = self.getCenter(input_bbox)
     asset_center_x, asset_center_y = self.getCenter(asset_bbox)
@@ -273,9 +273,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
     points.append((p2[0] - self.anchorX, p2[1] - self.anchorY))
 
     angle = self.AngleBtw2Points(points[0], points[1]) + 90
-    print('-'*50)
-    print(angle)
-    print('-'*50)
     M = cv2.getRotationMatrix2D((points[0][0], points[0][1]), angle, 1)
     #img_rotation = cv2.warpAffine(img_translation, M, (iw, ih))
 
@@ -333,6 +330,9 @@ class LANDMARK_MATCHING(LANDMARK_points):
       
       transform_ = (Face_contour, Nose, L_Eye, R_Eye, L_Eye_b, R_Eye_b, Mouth)
       return [Face_contour_ID, Nose_ID, Eye_ID,  Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_
+
+
+
 
   def landmark_part_matching(self, input_image):
     results = self.face_mesh.process(input_image)
@@ -400,8 +400,12 @@ class LANDMARK_MATCHING(LANDMARK_points):
         
         inputs = [input_Face_contour, input_left_eye, input_right_eye, input_left_eye_b, input_right_eye_b, input_nose, input_mouth]
         transform_inputs = [transform_input_nose, transform_input_left_eye, transform_input_right_eye, transform_input_left_eye_b, transform_input_right_eye_b, transform_input_mouth]
-
-        if abs(angle) > 5.0:
+        
+            
+        print('-'*50)
+        print(angle)
+        print('-'*50)
+        if abs(angle) < 5.0:
           assets = [self._landmarks.Asset_Face_contours, 
                     self._landmarks.Asset_left_eyes, 
                     self._landmarks.Asset_right_eyes, 
@@ -510,6 +514,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     print(f'Asset_{id_data}_RIGHT_EYE_B =',input_right_eye_b)
     print(f'Asset_{id_data}_NOSE =',input_nose)
     print(f'Asset_{id_data}_MOUTH =',input_mouth)
+    print()
 
     print(f'TRANSFORM_Asset_{id_data}_LEFT_EYE =',transform_input_left_eye)
     print(f'TRANSFORM_Asset_{id_data}_RIGHT_EYE =',transform_input_right_eye)
@@ -517,6 +522,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     print(f'TRANSFORM_Asset_{id_data}_RIGHT_EYE_B =',transform_input_right_eye_b)
     print(f'TRANSFORM_Asset_{id_data}_NOSE =',transform_input_nose)
     print(f'TRANSFORM_Asset_{id_data}_MOUTH =',transform_input_mouth)
+    print()
 
 
 
@@ -581,6 +587,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     print(f'Asset_{id_data}_R_RIGHT_EYE_B =',input_right_eye_b)
     print(f'Asset_{id_data}_R_NOSE =',input_nose)
     print(f'Asset_{id_data}_R_MOUTH =',input_mouth)
+    print()
 
     print(f'TRANSFORM_Asset_{id_data}_R_LEFT_EYE =',transform_input_left_eye)
     print(f'TRANSFORM_Asset_{id_data}_R_RIGHT_EYE =',transform_input_right_eye)
