@@ -368,7 +368,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
         for id, lm in enumerate(points):
           if abs(angle) > 5.0:
             p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
-            (x, y) = int(p[0]), int(p[1])
+            (x, y) = (nt(p[0]), int(p[1]))
           else:
             (x, y) = (lm[0], lm[1])
             
@@ -405,13 +405,29 @@ class LANDMARK_MATCHING(LANDMARK_points):
         print('-'*50)
         print(angle)
         print('-'*50)
+        
+        assets = [self._landmarks.Asset_Face_contours,
+            self._landmarks.Asset_left_eyes,
+            self._landmarks.Asset_right_eyes,
+            self._landmarks.Asset_left_eyes_b,
+            self._landmarks.Asset_right_eyes_b,
+            self._landmarks.Asset_nose,
+            self._landmarks.Asset_mouths]
+        transform_assets = [self._landmarks.Asset_transform_nose,
+              self._landmarks.Asset_transform_left_eyes,
+              self._landmarks.Asset_transform_right_eyes,
+              self._landmarks.Asset_transform_left_eyes_b,
+              self._landmarks.Asset_transform_right_eyes_b,
+              self._landmarks.Asset_transform_mouths
+              ]
+        """
         if abs(angle) < 5.0:
-          assets = [self._landmarks.Asset_Face_contours, 
-                    self._landmarks.Asset_left_eyes, 
-                    self._landmarks.Asset_right_eyes, 
-                    self._landmarks.Asset_left_eyes_b, 
-                    self._landmarks.Asset_right_eyes_b, 
-                    self._landmarks.Asset_nose, 
+          assets = [self._landmarks.Asset_Face_contours,
+                    self._landmarks.Asset_left_eyes,
+                    self._landmarks.Asset_right_eyes,
+                    self._landmarks.Asset_left_eyes_b,
+                    self._landmarks.Asset_right_eyes_b,
+                    self._landmarks.Asset_nose,
                     self._landmarks.Asset_mouths]
           transform_assets = [self._landmarks.Asset_transform_nose,
                               self._landmarks.Asset_transform_left_eyes,
@@ -421,7 +437,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
                               self._landmarks.Asset_transform_mouths
                               ]
         else:
-          assets = [self._landmarks.Asset_r_Face_contours, 
+          assets = [self._landmarks.Asset_r_Face_contours,
                     self._landmarks.Asset_r_left_eyes, 
                     self._landmarks.Asset_r_right_eyes, 
                     self._landmarks.Asset_r_left_eyes_b, 
@@ -435,7 +451,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
                               self._landmarks.Asset_transform_r_right_eyes_b,
                               self._landmarks.Asset_transform_r_mouths
                               ]
-      
+        """
         return self.TotalResult(assets, inputs, transform_assets, transform_inputs)
     else:
         return [], []
@@ -542,7 +558,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
         for id, lm in enumerate(points):
           p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
-          (x, y) = int(p[0]), int(p[1])
+          (x, y) = (int(p[0]), int(p[1]))
             
           if id in self._landmarks.FACE_CONTOUR : input_Face_contour.append((x,y))
           if id in self._landmarks.LEFT_EYE : 
