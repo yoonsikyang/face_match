@@ -92,7 +92,7 @@ class LANDMARK_points:
     TRANSFORM_Asset_0_R_LEFT_EYE_B = [(387, 156), (348, 156), (352, 143), (394, 143)]
     TRANSFORM_Asset_0_R_RIGHT_EYE_B = [(112, 153), (153, 156), (149, 142), (105, 139)]
     TRANSFORM_Asset_0_R_NOSE = [(248, 175), (199, 291), (239, 324), (296, 293)]
-    TRANSFORM_Asset_0_R_MOUTH = [(250, 357), (250, 380), (250, 381), (250, 410)]
+    TRANSFORM_Asset_0_R_MOUTH = [(250, 357), (250, 380), (250, 381), (250, 410), (182, 379), (326, 382)]
  
     # Asset 1
     TRANSFORM_Asset_1_R_LEFT_EYE = [(362, 227), (373, 177), (415, 205), (305, 217)]
@@ -100,7 +100,7 @@ class LANDMARK_points:
     TRANSFORM_Asset_1_R_LEFT_EYE_B = [(391, 155), (352, 156), (356, 142), (399, 141)]
     TRANSFORM_Asset_1_R_RIGHT_EYE_B = [(109, 155), (149, 157), (145, 143), (102, 142)]
     TRANSFORM_Asset_1_R_NOSE = [(250, 176), (200, 290), (242, 324), (300, 290)]
-    TRANSFORM_Asset_1_R_MOUTH = [(251, 363), (251, 379), (251, 379), (251, 404)]
+    TRANSFORM_Asset_1_R_MOUTH = [(251, 363), (251, 379), (251, 379), (251, 404), (179, 373), (330, 372)]
 
 
 
