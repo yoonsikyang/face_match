@@ -368,7 +368,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
         for id, lm in enumerate(points):
           if abs(angle) > 5.0:
             p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
-            (x, y) = (nt(p[0]), int(p[1]))
+            (x, y) = (int(p[0]), int(p[1]))
           else:
             (x, y) = (lm[0], lm[1])
             
