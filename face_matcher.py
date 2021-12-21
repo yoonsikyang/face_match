@@ -570,7 +570,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
             input_nose.append((x, y))
             if id in self._landmarks.TRANSFORM_NOSE : transform_input_nose.append((x, y))
 
-          if id in self._landmarks.MOUTH : 
+          if id in self._landmarks.MOUTH :
             input_mouth.append((x, y))
             if id in self._landmarks.TRANSFORM_MOUTH : transform_input_mouth.append((x, y))    
     
@@ -592,11 +592,11 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 if __name__ == "__main__":
-  id = 0
+  id = 1
   input_image = cv2.imread(f"{id}.png")
   #input_image = cv2.imread("1.png")
 
   land = LANDMARK_MATCHING()
   input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)  
-  land.makeDatabase(input_image, id)
-  #land.landmark_part_matching(input_image)
+  #land.makeDatabase(input_image, id)
+  land.landmark_part_matching(input_image)
