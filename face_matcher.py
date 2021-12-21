@@ -17,9 +17,12 @@ from mediapipe.framework.formats import landmark_pb2
 from scipy.spatial import distance
 
 from planar import BoundingBox
+from math import atan2,degrees
 
 #import landmark_points
 from landmark_points import LANDMARK_points
+
+
 
 
 class LANDMARK_MATCHING(LANDMARK_points):
@@ -90,6 +93,15 @@ class LANDMARK_MATCHING(LANDMARK_points):
     res = np.rad2deg((ang1 - ang2) % (2 * np.pi))
     if direction == "CCW": res = (360 - res) % 360
     return res
+
+  def AngleBtw2Points(self, pointA, pointB):
+    changeInX = pointB[0] - pointA[0]
+    changeInY = pointB[1] - pointA[1]
+    return degrees(atan2(changeInY,changeInX))
+
+    
+
+
     
   def getCenter(self, Point):
     x = Point.max_point.x - Point.min_point.x
@@ -99,7 +111,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
   def positive_cap(self, num):
     """ Cap a number to ensure positivity
-
     :param num: positive or negative number
     :returns: (overflow, capped_number)
     """
@@ -111,7 +122,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
   def roi_coordinates(self, rect, size, scale):
     """ Align the rectangle into the center and return the top-left coordinates
     within the new size. If rect is smaller, we add borders.
-
     :param rect: (x, y, w, h) bounding rectangle of the face
     :param size: (width, height) are the desired dimensions
     :param scale: scaling factor of the rectangle to be resized
@@ -132,7 +142,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
   def scaling_factor(self, rect, size):
     """ Calculate the scaling factor for the current image to be
         resized to the new dimensions
-
     :param rect: (x, y, w, h) bounding rectangle of the face
     :param size: (width, height) are the desired dimensions
     :returns: floating point scaling factor
@@ -152,7 +161,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
   def resize_image(self, img, scale):
     """ Resize image with the provided scaling factor
-
     :param img: image to be resized
     :param scale: scaling factor for resizing the image
     """
@@ -165,7 +173,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
   def resize_align(self, img, points, size):
     """ Resize image and associated points, align face to the center
       and crop to the desired size
-
     :param img: image to be resized
     :param points: *m* x 2 array of points
     :param size: (height, width) tuple of new desired size
@@ -234,6 +241,42 @@ class LANDMARK_MATCHING(LANDMARK_points):
     lists.append(w_trans)
     lists.append(h_trans)  
 
+
+  def _RotatePoint(self, p, rad):
+    x = math.cos(rad) * p[0] - math.sin(rad) * p[1]
+    y = math.sin(rad) * p[0] + math.cos(rad) * p[1]
+    return [x, y]
+
+  def RotatePoint(self, cen_pt, p, rad):
+    trans_pt = p - cen_pt
+    rot_pt = self._RotatePoint(trans_pt, rad)
+    fin_pt = rot_pt + cen_pt
+    return fin_pt
+
+
+  def GetRadian(self, input_image, p1, p2):
+    ih, iw, _ = input_image.shape 
+
+    self.anchorX = abs(p1[0] - iw/2)
+    self.anchorY = abs(p1[1] - ih/2)
+
+    M = np.float32([[1, 0, - self.anchorX], [0, 1, - self.anchorY]]) 
+    img_translation = cv2.warpAffine(input_image, M, (iw, ih))
+
+    points=[]
+    points.append((p1[0] - self.anchorX, p1[1] - self.anchorY))
+    points.append((p2[0] - self.anchorX, p2[1] - self.anchorY))
+
+    angle = self.AngleBtw2Points(points[0], points[1]) + 90
+
+    M = cv2.getRotationMatrix2D((points[0][0], points[0][1]), angle, 1)
+    img_rotation = cv2.warpAffine(img_translation, M, (iw, ih))
+
+    rad = angle * (math.pi / 180.0)
+
+    return img_rotation, rad
+
+
   def landmark_part_matching(self, input_image):
     results = self.face_mesh.process(input_image)
 
@@ -257,13 +300,20 @@ class LANDMARK_MATCHING(LANDMARK_points):
     transform_input_mouth = []
 
     ih, iw, ic = input_image.shape
+
     if results.multi_face_landmarks:
       for faceLms in results.multi_face_landmarks:
           o_points = self.get_landmark_points(faceLms.landmark, ih, iw)
           input_image, points = self.resize_align(input_image, o_points, self.size)
+          
+          ih, iw, ic = input_image.shape
+          img, rad = self.GetRadian(input_image, points[4], points[8])
 
           for id, lm in enumerate(points):
-            (x, y) = lm[0],lm[1]        
+            p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
+            (x, y) = int(p[0]), int(p[1])
+            cv2.circle(img, (x,y),3,(255,0,0),3)
+            
             if id in self._landmarks.FACE_CONTOUR : input_Face_contour.append((x,y))
             if id in self._landmarks.LEFT_EYE : 
               input_left_eye.append((x, y))                
@@ -288,6 +338,8 @@ class LANDMARK_MATCHING(LANDMARK_points):
             if id in self._landmarks.MOUTH : 
               input_mouth.append((x, y))
               if id in self._landmarks.TRANSFORM_MOUTH : transform_input_mouth.append((x, y))
+          cv2.imshow("sss",img)
+
 
 
     Face_contour_ID, _ = self.landmark_pointSet_matching(self._landmarks.Asset_Face_contours, input_Face_contour)
@@ -337,27 +389,11 @@ class LANDMARK_MATCHING(LANDMARK_points):
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_mouth, self._landmarks.Asset_transform_mouths, Mouth_ID, 'MOUTH')
     self.value_to_list(Mouth, Angle, h_scale, v_scale, 0, v_trans)
     
-
+    cv2.imshow("input_image", input_image)
+    cv2.imwrite("input_image.png", input_image)
+    cv2.waitKey(0)
     transform_ = (Face_contour, Nose, L_Eye, R_Eye, L_Eye_b, R_Eye_b, Mouth)
     return [Face_contour_ID, Nose_ID, Eye_ID,  Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -389,9 +425,15 @@ class LANDMARK_MATCHING(LANDMARK_points):
       for faceLms in results.multi_face_landmarks:
           o_points = self.get_landmark_points(faceLms.landmark, ih, iw)
           input_image, points = self.resize_align(input_image, o_points, self.size)
+          
+          ih, iw, ic = input_image.shape
+          img, rad = self.GetRadian(input_image, points[4], points[8])
 
           for id, lm in enumerate(points):
-            (x, y) = lm[0],lm[1]        
+            p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
+            (x, y) = int(p[0]), int(p[1])
+            cv2.circle(img, (x,y),3,(255,0,0),3)
+            
             if id in self._landmarks.FACE_CONTOUR : input_Face_contour.append((x,y))
             if id in self._landmarks.LEFT_EYE : 
               input_left_eye.append((x, y))                
@@ -416,6 +458,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
             if id in self._landmarks.MOUTH : 
               input_mouth.append((x, y))
               if id in self._landmarks.TRANSFORM_MOUTH : transform_input_mouth.append((x, y))
+          cv2.imshow("sss",img)
 
     for point in transform_input_left_eye:
       cv2.circle(input_image,point,3,(255,0,0),2)
@@ -447,9 +490,11 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 if __name__ == "__main__":
-  id = 0
+  id = 1
   input_image = cv2.imread(f"{id}.png")
+  #input_image = cv2.imread("1.png")
 
   land = LANDMARK_MATCHING()
   input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)  
-  land.makeDatabase(input_image,id)
+  land.makeDatabase(input_image, id)
+  land.landmark_part_matching(input_image)
