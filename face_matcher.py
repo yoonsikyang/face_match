@@ -233,7 +233,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
       input_h_dist = self.euclidean_dist(input_pts[1], input_pts[3]) - (self.euclidean_dist(input_pts[5], input_pts[4]) /2)
       asset_w_dist = self.euclidean_dist(asset_pts[0], asset_pts[2])
       asset_h_dist = self.euclidean_dist(asset_pts[1], asset_pts[3])
-      print('ssssssssssssssssssssssssssss ',(self.euclidean_dist(input_pts[5], input_pts[4]) /2))
 
     input_center_x, input_center_y = self.getCenter(input_bbox)
     asset_center_x, asset_center_y = self.getCenter(asset_bbox)
@@ -366,7 +365,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     self.value_to_list(Face_contour, 0.0, 1.0, 1.0, 0.0, 0.0)
 
     Angle, h_scale, v_scale, h_trans, v_trans = self.get_transform(transform_input_nose, self._landmarks.Asset_transform_nose, Nose_ID, 'NOSE')
-    self.value_to_list(Nose, 0, h_scale, v_scale, 0, v_trans)
+    self.value_to_list(Nose, 0, h_scale, v_scale, 0, 0)
     
     Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform(transform_input_left_eye, self._landmarks.Asset_transform_left_eyes, Eye_ID, 'LEFT_EYE')
     Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform(transform_input_right_eye, self._landmarks.Asset_transform_right_eyes, Eye_ID, 'RIGHT_EYE')
@@ -390,7 +389,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
     Angle, h_scale, v_scale, h_trans, v_trans  = self.get_transform(transform_input_mouth, self._landmarks.Asset_transform_mouths, Mouth_ID, 'MOUTH')
-    self.value_to_list(Mouth, Angle, h_scale, v_scale, 0, 0)
+    self.value_to_list(Mouth, Angle, h_scale, v_scale, 0, v_trans)
     
     transform_ = (Face_contour, Nose, L_Eye, R_Eye, L_Eye_b, R_Eye_b, Mouth)
     return [Face_contour_ID, Nose_ID, Eye_ID,  Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_
