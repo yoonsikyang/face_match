@@ -230,7 +230,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
       asset_h_dist = self.euclidean_dist(asset_pts[0], asset_pts[3])
     elif mode == 'MOUTH':
       input_w_dist = self.euclidean_dist(input_pts[0], input_pts[2])
-      input_h_dist = self.euclidean_dist(input_pts[1], input_pts[3]) - (self.euclidean_dist(input_pts[5], input_pts[4]) /2)
+      input_h_dist = self.euclidean_dist(input_pts[1], input_pts[3]) #- (self.euclidean_dist(input_pts[5], input_pts[4]) /2)
       asset_w_dist = self.euclidean_dist(asset_pts[0], asset_pts[2])
       asset_h_dist = self.euclidean_dist(asset_pts[1], asset_pts[3])
 
