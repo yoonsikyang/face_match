@@ -40,7 +40,7 @@ class LANDMARK_points:
     self.TRANSFORM_LEFT_EYE_B = [296, 334, 282, 295]   
     self.TRANSFORM_RIGHT_EYE_B = [105, 66, 65, 52]    
     self.TRANSFORM_NOSE = [131, 8, 360, 141] 
-    self.TRANSFORM_MOUTH = [78, 0, 291, 17]
+    self.TRANSFORM_MOUTH = [78, 0, 291, 17, 13, 14]
 
     self.POINTS_ROTATE = [4, 175, 33, 263, 61, 291]
 

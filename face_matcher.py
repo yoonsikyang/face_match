@@ -218,7 +218,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     asset_angle = self.getAngle_Dist_2P(asset_pts[0], asset_pts[2])
     asset_bbox = BoundingBox(asset_pts)
 
-    if mode == 'LEFT_EYE' or mode == 'RIGHT_EYE' or mode == 'NOSE' or mode == 'MOUTH' :
+    if mode == 'LEFT_EYE' or mode == 'RIGHT_EYE' or mode == 'NOSE':
       input_w_dist = self.euclidean_dist(input_pts[0], input_pts[2])
       input_h_dist = self.euclidean_dist(input_pts[1], input_pts[3])
       asset_w_dist = self.euclidean_dist(asset_pts[0], asset_pts[2])
@@ -228,6 +228,12 @@ class LANDMARK_MATCHING(LANDMARK_points):
       input_h_dist = self.euclidean_dist(input_pts[0], input_pts[3])
       asset_w_dist = self.euclidean_dist(asset_pts[0], asset_pts[1])
       asset_h_dist = self.euclidean_dist(asset_pts[0], asset_pts[3])
+    elif mode == 'MOUTH':
+      input_w_dist = self.euclidean_dist(input_pts[0], input_pts[2])
+      input_h_dist = self.euclidean_dist(input_pts[1], input_pts[3]) - self.euclidean_dist(input_pts[4], input_pts[5])
+      asset_w_dist = self.euclidean_dist(asset_pts[0], asset_pts[2])
+      asset_h_dist = self.euclidean_dist(asset_pts[1], asset_pts[3])
+
     
     input_center_x, input_center_y = self.getCenter(input_bbox)
     asset_center_x, asset_center_y = self.getCenter(asset_bbox)
@@ -338,9 +344,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
             if id in self._landmarks.MOUTH : 
               input_mouth.append((x, y))
               if id in self._landmarks.TRANSFORM_MOUTH : transform_input_mouth.append((x, y))
-          cv2.imshow("sss",img)
-
-
 
     Face_contour_ID, _ = self.landmark_pointSet_matching(self._landmarks.Asset_Face_contours, input_Face_contour)
     _, res_l_eye = self.landmark_pointSet_matching(self._landmarks.Asset_left_eyes, input_left_eye)
@@ -389,9 +392,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
     Angle, v_scale, h_scale, v_trans, h_trans  = self.get_transform(transform_input_mouth, self._landmarks.Asset_transform_mouths, Mouth_ID, 'MOUTH')
     self.value_to_list(Mouth, Angle, h_scale, v_scale, 0, v_trans)
     
-    cv2.imshow("input_image", input_image)
-    cv2.imwrite("input_image.png", input_image)
-    cv2.waitKey(0)
     transform_ = (Face_contour, Nose, L_Eye, R_Eye, L_Eye_b, R_Eye_b, Mouth)
     return [Face_contour_ID, Nose_ID, Eye_ID,  Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_
 
