@@ -209,7 +209,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     elif mode == 'LEFT_EYE_B': input_pts = np.array([input_[0], input_[1], input_[2], input_[3]]) 
     elif mode == 'RIGHT_EYE_B': input_pts = np.array([input_[0], input_[1], input_[2], input_[3]])
     elif mode == 'NOSE': input_pts = np.array([input_[0], input_[1], input_[2], input_[3]]) 
-    elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[1], input_[2], input_[3], input_[4], input_[5]]) 
+    elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[3], input_[4], input_[5], input_[1], input_[2]]) 
 
     input_bbox = BoundingBox(input_pts)
     input_angle = self.getAngle_Dist_2P(input_pts[0], input_pts[2])
