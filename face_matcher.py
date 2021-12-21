@@ -507,49 +507,38 @@ class LANDMARK_MATCHING(LANDMARK_points):
             if id in self._landmarks.TRANSFORM_MOUTH : transform_input_mouth.append((x, y))
 
     
-    print(f'Asset_{id_data}_FACE_CONTOUR =',input_Face_contour)
-    print(f'Asset_{id_data}_LEFT_EYE =',input_left_eye)
-    print(f'Asset_{id_data}_RIGHT_EYE =',input_right_eye)
-    print(f'Asset_{id_data}_LEFT_EYE_B =',input_right_eye_b)
-    print(f'Asset_{id_data}_RIGHT_EYE_B =',input_right_eye_b)
-    print(f'Asset_{id_data}_NOSE =',input_nose)
-    print(f'Asset_{id_data}_MOUTH =',input_mouth)
-    print()
+        print(f'Asset_{id_data}_FACE_CONTOUR =',input_Face_contour)
+        print(f'Asset_{id_data}_LEFT_EYE =',input_left_eye)
+        print(f'Asset_{id_data}_RIGHT_EYE =',input_right_eye)
+        print(f'Asset_{id_data}_LEFT_EYE_B =',input_right_eye_b)
+        print(f'Asset_{id_data}_RIGHT_EYE_B =',input_right_eye_b)
+        print(f'Asset_{id_data}_NOSE =',input_nose)
+        print(f'Asset_{id_data}_MOUTH =',input_mouth)
+        print()
 
-    print(f'TRANSFORM_Asset_{id_data}_LEFT_EYE =',transform_input_left_eye)
-    print(f'TRANSFORM_Asset_{id_data}_RIGHT_EYE =',transform_input_right_eye)
-    print(f'TRANSFORM_Asset_{id_data}_LEFT_EYE_B =',transform_input_left_eye_b)
-    print(f'TRANSFORM_Asset_{id_data}_RIGHT_EYE_B =',transform_input_right_eye_b)
-    print(f'TRANSFORM_Asset_{id_data}_NOSE =',transform_input_nose)
-    print(f'TRANSFORM_Asset_{id_data}_MOUTH =',transform_input_mouth)
-    print()
-
-
+        print(f'TRANSFORM_Asset_{id_data}_LEFT_EYE =',transform_input_left_eye)
+        print(f'TRANSFORM_Asset_{id_data}_RIGHT_EYE =',transform_input_right_eye)
+        print(f'TRANSFORM_Asset_{id_data}_LEFT_EYE_B =',transform_input_left_eye_b)
+        print(f'TRANSFORM_Asset_{id_data}_RIGHT_EYE_B =',transform_input_right_eye_b)
+        print(f'TRANSFORM_Asset_{id_data}_NOSE =',transform_input_nose)
+        print(f'TRANSFORM_Asset_{id_data}_MOUTH =',transform_input_mouth)
+        print()
 
 
-    input_Face_contour = []
-    input_left_eye = []
-    input_right_eye = []
-    input_left_eye_b = []
-    input_right_eye_b = []
-    input_nose = []
-    input_mouth = []
+        input_Face_contour = []
+        input_left_eye = []
+        input_right_eye = []
+        input_left_eye_b = []
+        input_right_eye_b = []
+        input_nose = []
+        input_mouth = []
 
-    transform_input_left_eye = []
-    transform_input_right_eye = []
-    transform_input_left_eye_b = []
-    transform_input_right_eye_b = []
-    transform_input_nose = []
-    transform_input_mouth = []
-
-    ih, iw, ic = input_image.shape
-
-    if results.multi_face_landmarks:
-        o_points = self.get_landmark_points(results.multi_face_landmarks[0].landmark, ih, iw)
-        input_image, points = self.resize_align(input_image, o_points, self.size)
-        
-        ih, iw, ic = input_image.shape
-        rad, angle = self.GetRadian(input_image, points[4], points[8])
+        transform_input_left_eye = []
+        transform_input_right_eye = []
+        transform_input_left_eye_b = []
+        transform_input_right_eye_b = []
+        transform_input_nose = []
+        transform_input_mouth = []
 
         for id, lm in enumerate(points):
           p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
@@ -580,30 +569,30 @@ class LANDMARK_MATCHING(LANDMARK_points):
             input_mouth.append((x, y))
             if id in self._landmarks.TRANSFORM_MOUTH : transform_input_mouth.append((x, y))    
     
-    print(f'Asset_{id_data}_R_FACE_CONTOUR =',input_Face_contour)
-    print(f'Asset_{id_data}_R_LEFT_EYE =',input_left_eye)
-    print(f'Asset_{id_data}_R_RIGHT_EYE =',input_right_eye)
-    print(f'Asset_{id_data}_R_LEFT_EYE_B =',input_right_eye_b)
-    print(f'Asset_{id_data}_R_RIGHT_EYE_B =',input_right_eye_b)
-    print(f'Asset_{id_data}_R_NOSE =',input_nose)
-    print(f'Asset_{id_data}_R_MOUTH =',input_mouth)
-    print()
+        print(f'Asset_{id_data}_R_FACE_CONTOUR =',input_Face_contour)
+        print(f'Asset_{id_data}_R_LEFT_EYE =',input_left_eye)
+        print(f'Asset_{id_data}_R_RIGHT_EYE =',input_right_eye)
+        print(f'Asset_{id_data}_R_LEFT_EYE_B =',input_right_eye_b)
+        print(f'Asset_{id_data}_R_RIGHT_EYE_B =',input_right_eye_b)
+        print(f'Asset_{id_data}_R_NOSE =',input_nose)
+        print(f'Asset_{id_data}_R_MOUTH =',input_mouth)
+        print()
 
-    print(f'TRANSFORM_Asset_{id_data}_R_LEFT_EYE =',transform_input_left_eye)
-    print(f'TRANSFORM_Asset_{id_data}_R_RIGHT_EYE =',transform_input_right_eye)
-    print(f'TRANSFORM_Asset_{id_data}_R_LEFT_EYE_B =',transform_input_left_eye_b)
-    print(f'TRANSFORM_Asset_{id_data}_R_RIGHT_EYE_B =',transform_input_right_eye_b)
-    print(f'TRANSFORM_Asset_{id_data}_R_NOSE =',transform_input_nose)
-    print(f'TRANSFORM_Asset_{id_data}_R_MOUTH =',transform_input_mouth)
+        print(f'TRANSFORM_Asset_{id_data}_R_LEFT_EYE =',transform_input_left_eye)
+        print(f'TRANSFORM_Asset_{id_data}_R_RIGHT_EYE =',transform_input_right_eye)
+        print(f'TRANSFORM_Asset_{id_data}_R_LEFT_EYE_B =',transform_input_left_eye_b)
+        print(f'TRANSFORM_Asset_{id_data}_R_RIGHT_EYE_B =',transform_input_right_eye_b)
+        print(f'TRANSFORM_Asset_{id_data}_R_NOSE =',transform_input_nose)
+        print(f'TRANSFORM_Asset_{id_data}_R_MOUTH =',transform_input_mouth)
 
 
 
 if __name__ == "__main__":
-  id = 1
+  id = 0
   input_image = cv2.imread(f"{id}.png")
   #input_image = cv2.imread("1.png")
 
   land = LANDMARK_MATCHING()
   input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)  
-  #land.makeDatabase(input_image, id)
-  land.landmark_part_matching(input_image)
+  land.makeDatabase(input_image, id)
+  #land.landmark_part_matching(input_image)
