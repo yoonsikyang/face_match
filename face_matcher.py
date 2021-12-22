@@ -420,15 +420,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
         print('-'*50)
         print(angle)
         print('-'*50)
-        #[input_[0], input_[7], input_[21], input_[50]
-        cv2.circle(rotated_image,input_mouth[0],3,(255,0,0),3)
-        cv2.circle(rotated_image,input_mouth[7],3,(255,0,0),3)
-        cv2.circle(rotated_image,input_mouth[21],3,(255,0,0),3)
-        cv2.circle(rotated_image,input_mouth[50],3,(255,0,0),3)
-
-        cv2.imshow('ssss',rotated_image)
-        cv2.waitKey(0)
-               
+        
         return self.TotalResult(assets, inputs)
     else:
         return [], []
