@@ -438,7 +438,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     elif mode == 'NOSE': input_pts = np.array([input_[6], input_[24], input_[26], input_[56]]) 
     elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[7], input_[21], input_[50]])
 
-    input_bbox = BoundingBox(input_pts)
+    input_bbox = BoundingBox(input_)
     input_angle = self.getAngle_Dist_2P(input_pts[0], input_pts[2])
 
     input_w_dist = (input_bbox.max_point.x - input_bbox.min_point.x) / (face_bbox.max_point.x - face_bbox.min_point.x) 
