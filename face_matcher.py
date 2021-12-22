@@ -331,7 +331,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
       Nose_ID, Eye_ID, Eye_B_ID, Mouth_ID = 1, 1, 1, 1
 
       Angle, h_scale, v_scale, h_trans, v_trans = self.get_transform_new(face_bbox, inputs[5], self._landmarks.Asset_transform[Nose_ID][0], 'NOSE')
-      self.value_to_list(Nose, 0, h_scale, v_scale, 0, v_trans)
+      self.value_to_list(Nose, 0, h_scale, v_scale, 0, 0)
       
       Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[1], self._landmarks.Asset_transform[Eye_ID][1], 'LEFT_EYE')
       Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[2], self._landmarks.Asset_transform[Eye_ID][2], 'RIGHT_EYE')
