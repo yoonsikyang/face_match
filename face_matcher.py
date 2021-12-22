@@ -328,6 +328,8 @@ class LANDMARK_MATCHING(LANDMARK_points):
       face_bbox = BoundingBox(inputs[0])
       self.value_to_list(Face_contour, 0.0, 1.0, 1.0, 0.0, 0.0)
 
+      Nose_ID, Eye_ID, Eye_B_ID, Mouth_ID = 0, 0, 0, 0
+
       Angle, h_scale, v_scale, h_trans, v_trans = self.get_transform_new(face_bbox, inputs[5], self._landmarks.Asset_transform[Nose_ID][0], 'NOSE')
       self.value_to_list(Nose, 0, h_scale, v_scale, 0, 0)
       
