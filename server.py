@@ -42,16 +42,16 @@ async def process(mode, img):
     for i, num in enumerate(res):
         if mode == 0:
             if i == 0: asset_name = detector._landmarks.WOMAN_FACE_NAME[num]
-            elif i == 1: asset_name = detector._landmarks.WOMAN_NOSE_NAME[num]
-            elif i == 2 or i == 3: asset_name = detector._landmarks.WOMAN_EYE_NAME[num]
-            elif i == 4 or i == 5: asset_name = detector._landmarks.WOMAN_EYE_BROW_NAME[num]
-            else: asset_name = detector._landmarks.WOMAN_MOUTH_NAME[num]
+            elif i == 1 or i == 2: asset_name = detector._landmarks.WOMAN_EYE_BROW_NAME[num]
+            elif i == 3: asset_name = detector._landmarks.WOMAN_NOSE_NAME[num]
+            elif i == 4: asset_name = detector._landmarks.WOMAN_MOUTH_NAME[num]
+            else: asset_name = detector._landmarks.WOMAN_EYE_NAME[num]
         else:
             if i == 0: asset_name = detector._landmarks.WOMAN_FACE_NAME[num]
-            elif i == 1: asset_name = detector._landmarks.WOMAN_NOSE_NAME[num]
-            elif i == 2 or i == 3: asset_name = detector._landmarks.WOMAN_EYE_NAME[num]
-            elif i == 4 or i == 5: asset_name = detector._landmarks.WOMAN_EYE_BROW_NAME[num]
-            else: asset_name = detector._landmarks.WOMAN_MOUTH_NAME[num]
+            elif i == 1 or i == 2: asset_name = detector._landmarks.WOMAN_EYE_BROW_NAME[num]
+            elif i == 3: asset_name = detector._landmarks.WOMAN_NOSE_NAME[num]
+            elif i == 4: asset_name = detector._landmarks.WOMAN_MOUTH_NAME[num]
+            else: asset_name = detector._landmarks.WOMAN_EYE_NAME[num]
 
         data.append({"type":int(i), "asset_id":int(num), "asset_name":asset_name, "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":transform[i][3], "v_trans":transform[i][4]})
 
