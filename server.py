@@ -58,13 +58,13 @@ async def process(mode, img):
     return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': json.dumps(data)}
 
 
-@app.post("/processFace")
-async def processFace(image: bytes = File(...)):
+@app.post("/processFace/{mode}")
+async def processFace(mode:int, image: bytes = File(...)):
     start = time.time()
 
     img = cv2.imdecode(np.frombuffer(image, np.uint8), cv2.IMREAD_UNCHANGED)
 
-    ret = await process(0, img)
+    ret = await process(mode, img)
 
     print('time: ' + str(time.time()-start) + ' ')
     return ret
