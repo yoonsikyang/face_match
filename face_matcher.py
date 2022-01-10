@@ -58,7 +58,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
   def landmark_pointSet_matching(self, asset_, input_):    
     res = []
-    for i in range(self._landmarks.Asset_size):
+    for i in range(len(asset_)):
       res.append(self.euclidean_dist_normalization(asset_[i], input_))
     index = np.argsort(res)
     return index[0], res
