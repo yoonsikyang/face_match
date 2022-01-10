@@ -288,7 +288,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     self.anchorY = abs(p1[1] - ih/2)
 
     M = np.float32([[1, 0, - self.anchorX], [0, 1, - self.anchorY]]) 
-    img_translation = cv2.warpAffine(input_image, M, (iw, ih))
+    #img_translation = cv2.warpAffine(input_image, M, (iw, ih))
 
     points=[]
     points.append((p1[0] - self.anchorX, p1[1] - self.anchorY))
@@ -296,11 +296,11 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
     angle = self.AngleBtw2Points(points[0], points[1]) + 90
     M = cv2.getRotationMatrix2D((points[0][0], points[0][1]), angle, 1)
-    img_rotation = cv2.warpAffine(img_translation, M, (iw, ih))
+    #img_rotation = cv2.warpAffine(img_translation, M, (iw, ih))
 
     rad = angle * (math.pi / 180.0)
 
-    return rad, angle, img_rotation
+    return rad, angle #, img_rotation
 
 
 
@@ -360,12 +360,12 @@ class LANDMARK_MATCHING(LANDMARK_points):
       
       transform_ = (Face_contour, Nose, L_Eye, R_Eye, L_Eye_b, R_Eye_b, Mouth)
       print(transform_)
-      return [Face_contour_ID, Nose_ID, Eye_ID,  Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_
+      return [Face_contour_ID, Nose_ID, Eye_ID, Eye_ID, Eye_B_ID, Eye_B_ID, Mouth_ID], transform_
 
 
 
-
-  def landmark_part_matching(self, input_image):
+  #mode:0 woman, 1 man
+  def landmark_part_matching(self, mode, input_image):
     results = self.face_mesh.process(input_image)
 
     # Draw the face mesh annotations on the image.
@@ -387,7 +387,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
         input_image, points = self.resize_align(input_image, o_points, self.size)
         
         ih, iw, ic = input_image.shape
-        rad, angle, rotated_image = self.GetRadian(input_image, points[4], points[8])
+        rad, angle = self.GetRadian(input_image, points[4], points[8])
         
 
         for id, lm in enumerate(points):
@@ -416,7 +416,13 @@ class LANDMARK_MATCHING(LANDMARK_points):
         inputs = [input_Face_contour, input_left_eye, input_right_eye, input_left_eye_b, input_right_eye_b, input_nose, input_mouth]
         #transform_inputs = [transform_input_nose, transform_input_left_eye, transform_input_right_eye, transform_input_left_eye_b, transform_input_right_eye_b, transform_input_mouth]
         
-        assets = [self._landmarks.Asset_Face_contours, self._landmarks.Asset_left_eyes, self._landmarks.Asset_right_eyes, self._landmarks.Asset_left_eyes_b, self._landmarks.Asset_right_eyes_b, self._landmarks.Asset_nose, self._landmarks.Asset_mouths]
+        # WOAMN
+        if mode == 0:
+          assets = [self._landmarks.Asset_Face_contours, self._landmarks.Asset_left_eyes, self._landmarks.Asset_right_eyes, self._landmarks.Asset_left_eyes_b, self._landmarks.Asset_right_eyes_b, self._landmarks.Asset_nose, self._landmarks.Asset_mouths]
+        # MAN
+        else:
+          assets = [self._landmarks.Asset_Face_contours, self._landmarks.Asset_left_eyes, self._landmarks.Asset_right_eyes, self._landmarks.Asset_left_eyes_b, self._landmarks.Asset_right_eyes_b, self._landmarks.Asset_nose, self._landmarks.Asset_mouths]
+        
         print('-'*50)
         print(angle)
         print('-'*50)

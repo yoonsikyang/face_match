@@ -28,9 +28,9 @@ detector = LANDMARK_MATCHING()
 
 
 
-async def process(img):
+async def process(mode, img):
     # Process landmark detection.
-    res, transform  = detector.landmark_part_matching(img)
+    res, transform  = detector.landmark_part_matching(mode, img)
 
     # Return if no face detected.
     if len(res) == 0:
@@ -40,8 +40,20 @@ async def process(img):
     # TODO add rotation, scale, translation value
     data = []
     for i, num in enumerate(res):
-        data.append({"type":int(i), "asset_id":int(num), "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":transform[i][3], "v_trans":transform[i][4]})
-        #data.append({"type":int(i), "asset_id":int(num), "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":0, "v_trans":0})
+        if mode == 0:
+            if i == 0: asset_name = detector._landmarks.WOMAN_FACE_NAME[num]
+            elif i == 1: asset_name = detector._landmarks.WOMAN_NOSE_NAME[num]
+            elif i == 2 or i == 3: asset_name = detector._landmarks.WOMAN_EYE_NAME[num]
+            elif i == 4 or i == 5: asset_name = detector._landmarks.WOMAN_EYE_BROW_NAME[num]
+            else: asset_name = detector._landmarks.WOMAN_MOUTH_NAME[num]
+        else:
+            if i == 0: asset_name = detector._landmarks.WOMAN_FACE_NAME[num]
+            elif i == 1: asset_name = detector._landmarks.WOMAN_NOSE_NAME[num]
+            elif i == 2 or i == 3: asset_name = detector._landmarks.WOMAN_EYE_NAME[num]
+            elif i == 4 or i == 5: asset_name = detector._landmarks.WOMAN_EYE_BROW_NAME[num]
+            else: asset_name = detector._landmarks.WOMAN_MOUTH_NAME[num]
+
+        data.append({"type":int(i), "asset_id":int(num), "asset_name":asset_name, "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":transform[i][3], "v_trans":transform[i][4]})
 
     return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': json.dumps(data)}
 
@@ -52,7 +64,7 @@ async def processFace(image: bytes = File(...)):
 
     img = cv2.imdecode(np.frombuffer(image, np.uint8), cv2.IMREAD_UNCHANGED)
 
-    ret = await process(img)
+    ret = await process(0, img)
 
     print('time: ' + str(time.time()-start) + ' ')
     return ret
