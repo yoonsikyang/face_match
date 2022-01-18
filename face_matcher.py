@@ -257,6 +257,9 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
     input_center_x, input_center_y = self.getCenter(input_bbox)
 
+    if mode == 'LEFT_EYE_B':
+      print(input_w_dist, asset_transform[1])
+
     return (input_angle-asset_transform[0]), (input_w_dist/asset_transform[1]), (input_h_dist/asset_transform[2]), (input_center_x-asset_transform[3]), (input_center_y-asset_transform[4])
   
 
@@ -337,7 +340,6 @@ class LANDMARK_MATCHING(LANDMARK_points):
       Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[1], transforms[1][Eye_ID], 'LEFT_EYE')
       Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[2], transforms[2][Eye_ID], 'RIGHT_EYE')
 
-
       if Angle_l < Angle_r:
         self.value_to_list(L_Eye, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
         self.value_to_list(R_Eye, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -(h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
@@ -345,8 +347,9 @@ class LANDMARK_MATCHING(LANDMARK_points):
         self.value_to_list(L_Eye, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -(h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
         self.value_to_list(R_Eye, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
 
-      Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[3], transforms[3][Eye_B_ID], 'LEFT_EYE_B')
-      Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[4], transforms[4][Eye_B_ID], 'RIGHT_EYE_B')
+      print(len(inputs[3]), len(inputs[4]), transforms[3][Eye_B_ID], transforms[4][Eye_B_ID])
+      Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[4], transforms[4][Eye_B_ID], 'LEFT_EYE_B')
+      Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[3], transforms[3][Eye_B_ID], 'RIGHT_EYE_B')
 
       if Angle_l < Angle_r:
         self.value_to_list(L_Eye_b, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
@@ -601,7 +604,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 if __name__ == "__main__":
-  id = 1
+  id = 2
   input_image = cv2.imread(f"{id}.png")
   #input_image = cv2.imread("1.png")
 
