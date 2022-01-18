@@ -1,19 +1,19 @@
 import numpy as np
+import csv  
+
 
 class LANDMARK_points:
   def __init__(self):
 
     # 해당 ID의 file 명 정의
-    self.WOMAN_FACE_NAME = ['SHAPE_ATRIANGLE_W10_W4', 'SHAPE_DIAMOND_W10_W4','SHAPE_LONGOVAL_W10_W4','SHAPE_LONGROUND_W10_W4','SHAPE_LONGSQUARE_W10_W4','SHAPE_LONGVTRIANGLE_W10_W4','SHAPE_OVAL_W10_W4','SHAPE_ROUND_W10_W4','SHAPE_SQUARE_W10_W4','SHAPE_VTRIANGLE_W10_W4']
-    self.WOMAN_EYE_NAME = ['ANGLEDUP','BIRDEYE','BOTTOMFLAT','LIONEYE','NO_DOUBLEFOLD','ROUNDED_EYE']
-    self.WOMAN_EYE_BROW_NAME = ['BROW_THICK_W1_BK','BROW_THICK_W2_BK','BROW_THICK_W3_BK','BROW_THICK_W4_BK','BROW_THICK_W5_BK','BROW_THICK_W6_BK','BROW_THICK_W7_BK','BROW_THICK_W8_BK','BROW_THICK_W9_BK','BROW_THICK_W10_BK','BROW_THICK_W11_BK','BROW_THICK_W12_BK']
-    self.WOMAN_MOUTH_NAME = ['TEST1',"TEST2"]
-    self.WOMAN_NOSE_NAME = ['NOSE_W10_W10','NOSE_W20_W10','NOSE_W30_W10','NOSE_W40_W10','NOSE_W50_W10']
+    self.WOMAN_FACE_NAME = ['SHAPE_W_AT10_W10_W10_2']
+    #self.WOMAN_FACE_NAME = ['SHAPE_W_AT10_W10_W10_2', 'SHAPE_W_DM10_W10_W10_2', 'SHAPE_W_LO10_W10_W10_2', 'SHAPE_W_LR10_W10_W10_2', 'SHAPE_W_LS10_W10_W10_2', 'SHAPE_W_LV10_W10_W10_2', 'SHAPE_W_OV10_W10_W10_2', 'SHAPE_W_RO10_W10_W10_2',  'SHAPE_W_SQ10_W10_W10_2', 'SHAPE_W_VT10_W10_W10_2']
+    self.WOMAN_EYE_NAME = ['EYE_W_AU10_LCS', 'EYE_W_AU20_LCS', 'EYE_W_AU30_LCS', 'EYE_W_AU40_LCS', 'EYE_W_AU50_LCS', 'EYE_W_BE10_LCS', 'EYE_W_BE20_LCS', 'EYE_W_BE30_LCS', 'EYE_W_BE40_LCS', 'EYE_W_BE50_LCS', 'EYE_W_BE60_LCS', 'EYE_W_BE70_LCS', 'EYE_W_BE80_LCS', 'EYE_W_BE90_LCS', 'EYE_W_BF10_LCS', 'EYE_W_BF20_LCS', 'EYE_W_BF30_LCS', 'EYE_W_BF40_LCS', 'EYE_W_BF50_LCS', 'EYE_W_BF60_LCS', 'EYE_W_BF70_LCS', 'EYE_W_LE10_LCS', 'EYE_W_LE20_LCS', 'EYE_W_LE30_LCS', 'EYE_W_LE40_LCS', 'EYE_W_LE50_LCS', 'EYE_W_LE60_LCS', 'EYE_W_LE70_LCS', 'EYE_W_LE80_LCS', 'EYE_W_LE90_LCS', 'EYE_W_ND10_LCS', 'EYE_W_ND20_LCS', 'EYE_W_ND30_LCS', 'EYE_W_ND40_LCS', 'EYE_W_ND50_LCS', 'EYE_W_ND60_LCS', 'EYE_W_ND70_LCS', 'EYE_W_ND80_LCS', 'EYE_W_RE10_LCS', 'EYE_W_RE20_LCS', 'EYE_W_RE30_LCS', 'EYE_W_RE40_LCS', 'EYE_W_RE50_LCS']
+    self.WOMAN_EYE_BROW_NAME = ['BROW_W_FL06', 'BROW_W_HA06', 'BROW_W_LW06', 'BROW_W_RH06', 'BROW_W_RL06', 'BROW_W_RM06', 'BROW_W_SF06', 'BROW_W_SH06', 'BROW_W_SL06', 'BROW_W_SM06', 'BROW_W_SS06', 'BROW_W_ST06']
+    self.WOMAN_MOUTH_NAME = ['LIP_W_BW10', 'LIP_W_BW20', 'LIP_W_BW30', 'LIP_W_BW40', 'LIP_W_DL10', 'LIP_W_DL20', 'LIP_W_FL10', 'LIP_W_FL20', 'LIP_W_FL30', 'LIP_W_FL40', 'LIP_W_HL10', 'LIP_W_HL20', 'LIP_W_HL30', 'LIP_W_HL40', 'LIP_W_HL50', 'LIP_W_HL60', 'LIP_W_HS10', 'LIP_W_HS20', 'LIP_W_HS30', 'LIP_W_HS40', 'LIP_W_HS50', 'LIP_W_HU10', 'LIP_W_HU20', 'LIP_W_HU30', 'LIP_W_RO10', 'LIP_W_RO20', 'LIP_W_RO30', 'LIP_W_TN10', 'LIP_W_TN20', 'LIP_W_TN30', 'LIP_W_TN40', 'LIP_W_TN50']
+    self.WOMAN_NOSE_NAME = ['NOSE_W_WN02', 'NOSE_W_WN04', 'NOSE_W_WN06', 'NOSE_W_WN08', 'NOSE_W_WN10', 'NOSE_W_WN12', 'NOSE_W_WN14', 'NOSE_W_WN16', 'NOSE_W_WN18', 'NOSE_W_WN20', 'NOSE_W_WN22', 'NOSE_W_WN24', 'NOSE_W_WN26', 'NOSE_W_WN28', 'NOSE_W_WN30', 'NOSE_W_WN32', 'NOSE_W_WN34', 'NOSE_W_WN36', 'NOSE_W_WN38', 'NOSE_W_WN40', 'NOSE_W_WN42', 'NOSE_W_WN44', 'NOSE_W_WN46']
 
-
-    self.Asset_size = 2
-
-    # Total Landmark
+     # Total Landmark
     ############################################################################################################################################################################################################
     self.FACE_CONTOUR = [10, 21, 54, 58, 67, 93, 103, 109, 127, 132, 136, 148, 149, 150, 152, 162, 172, 176, 234, 251, 284, 288, 297, 323, 332, 338, 356, 361, 365, 377, 378, 379, 389, 397, 400, 454]
     self.LEFT_EYE = [249, 252, 253, 254, 255, 256, 257, 258, 259, 260, 263, 286, 339, 341, 359, 362, 373, 374, 380, 381, 382, 384, 385, 386, 387, 388, 390, 398, 414, 463, 466, 467]
@@ -31,82 +31,98 @@ class LANDMARK_points:
     self.TRANSFORM_NOSE = [131, 8, 360, 141]
     self.TRANSFORM_MOUTH = [78, 0, 291, 17] #, 13, 14]
     
+
+    # Woman   
+    self.Asset_w_Face_contours = []
+    self.Asset_w_left_eyes = []
+    self.Asset_w_right_eyes = []
+    self.Asset_w_left_eyes_b = []
+    self.Asset_w_right_eyes_b = []
+    self.Asset_w_nose = []
+    self.Asset_w_mouths = []
+
+    self.Asset_w_left_eyes_transform = []
+    self.Asset_w_right_eyes_transform = []
+    self.Asset_w_left_eyes_b_transform = []
+    self.Asset_w_right_eyes_b_transform = []
+    self.Asset_w_nose_transform = []
+    self.Asset_w_mouths_transform = []
+
+
+    # Man
+    self.Asset_m_Face_contours = []
+    self.Asset_m_left_eyes = []
+    self.Asset_m_right_eyes = []
+    self.Asset_m_left_eyes_b = []
+    self.Asset_m_right_eyes_b = []
+    self.Asset_m_nose = []
+    self.Asset_m_mouths = []
+
+    self.Asset_m_left_eyes_transform = []
+    self.Asset_m_right_eyes_transform = []
+    self.Asset_m_left_eyes_b_transform = []
+    self.Asset_m_right_eyes_b_transform = []
+    self.Asset_m_nose_transform = []
+    self.Asset_m_mouths_transform = []
+
+
+
+
+    self.Face_contour_load('FACE_CONTOUR')
+
+    self.Facial_feature_load('LEFT_EYE')
+    self.Facial_feature_load('RIGHT_EYE')
+    self.Facial_feature_load('LEFT_EYE_BROW')
+    self.Facial_feature_load('RIGHT_EYE_BROW')
+    self.Facial_feature_load('NOSE')
+    self.Facial_feature_load('LIP')
+
+    self.Transform_load('TRANSFORM_LEFT_EYE')
+    self.Transform_load('TRANSFORM_RIGHT_EYE')
+    self.Transform_load('TRANSFORM_LEFT_EYE_BROW')
+    self.Transform_load('TRANSFORM_RIGHT_EYE_BROW')
+    self.Transform_load('TRANSFORM_NOSE')
+    self.Transform_load('TRANSFORM_LIP')
+
+
+
+
+  def Transform_load(self, file):
+    with open('data/' + file + '.csv', 'rU') as data:
+      reader = csv.reader(data)
+      for row in reader:
+        if file == 'TRANSFORM_LEFT_EYE' : self.Asset_w_left_eyes_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_RIGHT_EYE' : self.Asset_w_right_eyes_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_LEFT_EYE_BROW' : self.Asset_w_left_eyes_b_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_RIGHT_EYE_BROW' : self.Asset_w_right_eyes_b_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_NOSE' : self.Asset_w_nose_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_LIP' : self.Asset_w_mouths_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+
+  def Facial_feature_load(self, file):
+    with open('data/' + file + '.csv', 'rU') as data:
+      reader = csv.reader(data)
+      for row in reader:
+        test = [] 
+        for rr in range(len(row)):
+          temp = row[rr].split(",")
+          temp[0] = temp[0].split("(")[1]
+          temp[1] = temp[1].split(")")[0]              
+          test.append((float(temp[0]), float(temp[1])))
+        if file == 'LEFT_EYE' : self.Asset_w_left_eyes.append(test)
+        elif file == 'RIGHT_EYE' : self.Asset_w_right_eyes.append(test)
+        elif file == 'LEFT_EYE_BROW' : self.Asset_w_left_eyes_b.append(test)
+        elif file == 'RIGHT_EYE_BROW' : self.Asset_w_right_eyes_b.append(test)
+        elif file == 'NOSE' : self.Asset_w_nose.append(test)
+        elif file == 'LIP' : self.Asset_w_mouths.append(test)
+
+  def Face_contour_load(self, file):
+    with open('data/' + file + '.csv', 'rU') as data:
+      reader = csv.reader(data)
+      for row in reader:
+        self.Asset_w_Face_contours.append((float(row[0]), float(row[1])))
+
+
+
+  
+  
     
-    
-    
-    
-    # Asset 0
-    Asset_0_FACE_CONTOUR = [(248, 100), (82, 167), (95, 140), (105, 382), (158, 106), (85, 303), (120, 118), (200, 101), (75, 232), (93, 341), (139, 438), (221, 496), (179, 473), (161, 459), (250, 499), (76, 196), (121, 413), (198, 487), (79, 267), (415, 170), (401, 142), (394, 383), (339, 107), (413, 306), (377, 121), (298, 102), (423, 235), (406, 344), (359, 439), (279, 496), (321, 474), (339, 460), (421, 199), (377, 415), (302, 487), (419, 270)]
-    Asset_0_LEFT_EYE = [(356, 235), (315, 250), (330, 251), (344, 250), (363, 240), (302, 247), (337, 202), (320, 205), (354, 205), (364, 211), (362, 230), (304, 212), (356, 247), (294, 244), (369, 231), (293, 237), (343, 240), (330, 241), (317, 240), (305, 239), (298, 239), 
-                        (307, 226), (321, 221), (334, 220), (347, 221), (355, 225), (351, 237), (298, 233), (291, 226), (288, 238), (359, 228), (370, 220)]
-    Asset_0_RIGHT_EYE = [(142, 232), (183, 248), (168, 249), (154, 248), (136, 238), (196, 246), (161, 200), (179, 203), (145, 203), (135, 210), (136, 227), (194, 211), (142, 244), (205, 243), (130, 228), (205, 237), (155, 238), (168, 240), (181, 239), (193, 238), (201, 238), (190, 224), (178, 218), (164, 217), (152, 218), (144, 222), (148, 235), (201, 232), (207, 226), (210, 238), (140, 225), (129, 217)]
-    Asset_0_LEFT_EYE_B = [(385, 196), (351, 177), (371, 183), (282, 194), (379, 172), (321, 179), (324, 166), (394, 188), (355, 164), (286, 171)]
-    Asset_0_RIGHT_EYE_B = [(113, 194), (148, 178), (126, 183), (216, 195), (118, 171), (177, 180), (175, 166), (104, 186), (142, 163), (211, 172)]
-    Asset_0_NOSE = [(248, 338), (248, 352), (236, 283), (248, 322), (248, 301), (248, 244), (248, 199), (248, 346), (236, 344), (236, 338), (234, 322), (235, 302), (216, 340), (227, 345), (205, 338), (219, 343), (222, 336), (248, 348), (231, 351), (210, 347), (229, 348), (213, 326), (234, 248), (241, 345), (212, 315), (223, 307), (243, 348), (216, 338), (248, 221), (225, 275), (248, 282), (234, 267), (248, 263), (217, 333), (209, 337), (222, 324), (210, 340), (225, 290), (226, 335), (234, 342), (227, 337), (214, 345), (236, 344), (238, 347), 
-                    (260, 284), (261, 344), (259, 338), (262, 323), (261, 302), (280, 340), (270, 345), (277, 344), (274, 336), (283, 326), (262, 248), (255, 345), (284, 316), (273, 307), (253, 348), (280, 338), (271, 275), (261, 267), (279, 333), (274, 324), (271, 290), (269, 335), (262, 342), (269, 337), (259, 344), (258, 347)]
-    Asset_0_MOUTH = [(250, 380), (250, 388), (250, 397), (250, 403), (250, 404), (250, 413), (250, 423), (250, 433), (233, 377), (235, 397), (216, 385), (205, 392), (222, 398), (213, 400), (194, 403), (198, 403), (234, 387), (219, 392), (209, 396), (196, 403), (202, 407), (200, 403), (216, 403), (225, 402), (236, 402), (232, 432), (233, 421), (235, 411), (236, 403), (215, 403), (213, 406), (209, 412), (206, 417), (208, 403), (205, 405), (199, 410), (225, 403), (222, 409), (220, 417), (218, 426), (205, 402), (202, 400), (198, 398), (209, 403), (267, 377), (265, 397), (284, 385), (295, 393), (278, 398), (288, 401), (306, 405), (303, 405), (266, 387), (281, 392), (291, 397), (305, 405), (298, 409), (302, 405), (285, 404), (275, 403), (263, 403), (267, 432), (267, 421), (265, 411), (263, 403), (285, 404), (288, 407), (291, 413), (294, 418), (292, 404), (295, 406), (302, 411), (275, 403), (278, 410), (280, 417), (282, 426), (296, 403), (299, 402), (302, 399), (292, 404)]
-
-    Asset_0_TRANSFORM = [[343.6698994994993, 0.20689655172413793, 0.37343358395989973, 72.0, 149.0], [5.209603171459933, 0.23275862068965517, 0.12280701754385964, 81.0, 49.0], [355.6832340922845, 0.20402298850574713, 0.12280701754385964, 71.0, 49.0], [359.1272107448458, 0.14367816091954022, 0.047619047619047616, 50.0, 19.0], [6.769663511781459, 0.10057471264367816, 0.042606516290726815, 35.0, 17.0], [353.05348217154267, 0.3045977011494253, 0.13283208020050125, 106.0, 53.0]]
-
-    
-    
-    # Asset 1
-    Asset_1_FACE_CONTOUR = [(252, 100), (84, 168), (97, 141), (107, 382), (159, 106), (87, 304), (121, 119), (202, 101), (78, 233), (95, 343), (141, 439), (222, 496), (181, 474), (163, 460), (252, 499), (79, 198), (123, 415), (200, 487), (82, 268), (416, 169), (403, 142), (393, 383), (343, 107), (413, 305), (381, 121), (301, 101), (421, 235), (405, 343), (362, 439), (280, 496), (321, 474), (340, 460), (421, 199), (379, 415), (302, 487), (417, 269)]
-    Asset_1_LEFT_EYE = [(360, 238), (317, 256), (333, 256), (347, 254), (366, 243), (305, 254), (340, 206), (322, 209), (357, 209), (367, 216), (365, 233), (307, 217), (359, 250), (297, 250), (372, 233), (296, 245), (346, 245), (334, 247), (321, 247), (308, 247), (300, 246), 
-                        (310, 230), (322, 223), (336, 221), (350, 223), (358, 227), (354, 242), (300, 239), (294, 233), (291, 245), (362, 230), (372, 223)]
-    Asset_1_RIGHT_EYE = [(143, 239), (186, 255), (171, 256), (156, 254), (138, 244), (199, 252), (162, 205), (180, 208), (145, 209), (135, 216), (138, 233), (196, 216), (144, 250), (207, 249), (131, 234), (207, 243), (157, 245), (170, 247), (183, 247), (196, 245), (203, 244), (193, 228), (180, 222), (166, 220), (153, 223), (145, 227), (149, 242), (203, 237), (209, 232), (213, 244), (141, 231), (130, 223)]
-    Asset_1_LEFT_EYE_B = [(389, 200), (355, 184), (376, 189), (286, 199), (383, 178), (325, 185), (328, 171), (397, 192), (360, 171), (290, 177)]
-    Asset_1_RIGHT_EYE_B = [(113, 201), (147, 184), (126, 189), (215, 200), (118, 178), (176, 186), (172, 172), (105, 192), (141, 171), (210, 178)]
-    Asset_1_NOSE = [(250, 344), (250, 356), (238, 289), (250, 329), (250, 306), (250, 250), (251, 205), (250, 351), (237, 349), (238, 343), (236, 328), (237, 307), (217, 343), (228, 348), (205, 340), (220, 347), (223, 340), (250, 354), (232, 354), (210, 349), (230, 351), (214, 330), (236, 253), (243, 350), (214, 319), (224, 312), (245, 353), (217, 342), (251, 227), (227, 279), (250, 287), (237, 272), (250, 269), (218, 338), (210, 340), (224, 329), (210, 343), (227, 295), (228, 340), (236, 347), (228, 342), (214, 347), (238, 349), (240, 351), 
-                    (263, 289), (263, 349), (262, 343), (264, 328), (263, 307), (283, 343), (272, 349), (280, 347), (277, 340), (286, 331), (265, 254), (257, 350), (287, 319), (276, 312), (255, 353), (283, 342), (274, 279), (264, 272), (282, 338), (276, 329), (274, 295), (272, 340), (265, 347), (272, 342), (262, 349), (260, 351)]
-    Asset_1_MOUTH = [(251, 392), (251, 398), (251, 403), (251, 407), (251, 408), (251, 416), (251, 424), (251, 433), (234, 388), (235, 402), (218, 392), (207, 396), (223, 402), (213, 402), (193, 402), (197, 402), (235, 396), (221, 398), (210, 399), (194, 402), (201, 405), (198, 402), (214, 404), (225, 405), (237, 406), (233, 431), (234, 422), (235, 414), (237, 407), (214, 404), (212, 407), (209, 411), (207, 415), (207, 403), (204, 405), (199, 408), (224, 405), (222, 410), (220, 416), (218, 424), (204, 402), (201, 401), (200, 399), (207, 403), (267, 388), (266, 402), (283, 392), (294, 396), (279, 402), (289, 402), (309, 401), (306, 402), (267, 396), (281, 398), (292, 399), (307, 401), (300, 405), (303, 402), (286, 404), (276, 405), (265, 406), (269, 431), (268, 423), (266, 414), (265, 407), (286, 404), (290, 407), (293, 411), (295, 415), (294, 403), (297, 404), (303, 407), (276, 405), (279, 410), (282, 417), (283, 424), (297, 402), (300, 400), (302, 399), (294, 403)]
-
-    Asset_1_TRANSFORM = [[344.00226918774194, 0.21282798833819241, 0.37092731829573933, 73.0, 148.0], [5.491229975397836, 0.23615160349854228, 0.12531328320802004, 81.0, 50.0], [355.49968450083145, 0.2099125364431487, 0.12781954887218044, 72.0, 51.0], [359.1519281755388, 0.14868804664723032, 0.045112781954887216, 51.0, 18.0], [6.378186289089381, 0.10204081632653061, 0.03759398496240601, 35.0, 15.0], [353.59028252687136, 0.3236151603498542, 0.12275689223057644, 111.0, 41.0]]
-
-        
-        
-        
-
-
-
-    ############################################################################################################################################################################################################
-
-    self.Asset_Face_contours = []
-    self.Asset_left_eyes = []
-    self.Asset_right_eyes = []
-    self.Asset_left_eyes_b = []
-    self.Asset_right_eyes_b = []
-    self.Asset_nose = []
-    self.Asset_mouths = []
-
-    self.Asset_transform = []
-
-    self.Face_contour=[]
-    self.Nose=[]
-    self.L_Eye = []
-    self.R_Eye = []
-    self.L_Eye_b = []
-    self.R_Eye_b = []
-    self.Mouth = []
-    
-    for i in range(self.Asset_size):
-      # Total landmark
-      _asset_ = "Asset_{}_FACE_CONTOUR".format(i)
-      self.Asset_Face_contours.append(locals()[_asset_])
-      _asset_ = "Asset_{}_LEFT_EYE".format(i)
-      self.Asset_left_eyes.append(locals()[_asset_])
-      _asset_ = "Asset_{}_RIGHT_EYE".format(i)
-      self.Asset_right_eyes.append(locals()[_asset_])
-      _asset_ = "Asset_{}_LEFT_EYE_B".format(i)
-      self.Asset_left_eyes_b.append(locals()[_asset_])
-      _asset_ = "Asset_{}_RIGHT_EYE_B".format(i)
-      self.Asset_right_eyes_b.append(locals()[_asset_])
-      _asset_ = "Asset_{}_NOSE".format(i)
-      self.Asset_nose.append(locals()[_asset_])
-      _asset_ = "Asset_{}_MOUTH".format(i)
-      self.Asset_mouths.append(locals()[_asset_])
-
-      # Transform landmark
-      _asset_ = "Asset_{}_TRANSFORM".format(i)
-      self.Asset_transform.append(locals()[_asset_])
-      

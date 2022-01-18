@@ -304,8 +304,8 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 
-  def TotalResult(self, assets, inputs):
-      Face_contour_ID, _ = self.landmark_pointSet_matching(assets[0], inputs[0])
+  def TotalResult(self, assets, inputs, transforms):
+      Face_contour_ID = 0 #, _ = self.landmark_pointSet_matching(assets[0], inputs[0])
       _, res_l_eye = self.landmark_pointSet_matching(assets[1], inputs[1])
       _, res_r_eye = self.landmark_pointSet_matching(assets[2], inputs[2])      
       Eye_ID = self.dist_sum(res_l_eye, res_r_eye)
@@ -330,11 +330,12 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
       #Nose_ID, Eye_ID, Eye_B_ID, Mouth_ID = 1, 1, 1, 1
 
-      Angle, h_scale, v_scale, h_trans, v_trans = self.get_transform_new(face_bbox, inputs[5], self._landmarks.Asset_transform[Nose_ID][0], 'NOSE')
+
+      Angle, h_scale, v_scale, h_trans, v_trans = self.get_transform_new(face_bbox, inputs[5], transforms[0][Nose_ID], 'NOSE')
       self.value_to_list(Nose, 0, h_scale, v_scale, 0, 0)
       
-      Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[1], self._landmarks.Asset_transform[Eye_ID][1], 'LEFT_EYE')
-      Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[2], self._landmarks.Asset_transform[Eye_ID][2], 'RIGHT_EYE')
+      Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[1], transforms[1][Eye_ID], 'LEFT_EYE')
+      Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[2], transforms[2][Eye_ID], 'RIGHT_EYE')
 
 
       if Angle_l < Angle_r:
@@ -344,8 +345,8 @@ class LANDMARK_MATCHING(LANDMARK_points):
         self.value_to_list(L_Eye, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -(h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
         self.value_to_list(R_Eye, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
 
-      Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[3], self._landmarks.Asset_transform[Eye_B_ID][3], 'LEFT_EYE_B')
-      Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[4], self._landmarks.Asset_transform[Eye_B_ID][4], 'RIGHT_EYE_B')
+      Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform_new(face_bbox, inputs[3], transforms[3][Eye_B_ID], 'LEFT_EYE_B')
+      Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform_new(face_bbox, inputs[4], transforms[4][Eye_B_ID], 'RIGHT_EYE_B')
 
       if Angle_l < Angle_r:
         self.value_to_list(L_Eye_b, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
@@ -355,7 +356,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
         self.value_to_list(R_Eye_b, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
 
 
-      Angle, h_scale, v_scale, h_trans, v_trans  = self.get_transform_new(face_bbox, inputs[6], self._landmarks.Asset_transform[Mouth_ID][5], 'MOUTH')
+      Angle, h_scale, v_scale, h_trans, v_trans  = self.get_transform_new(face_bbox, inputs[6], transforms[5][Mouth_ID], 'MOUTH')
       self.value_to_list(Mouth, 0, h_scale, v_scale, 0, v_trans)
       
       transform_ = (Face_contour, L_Eye_b, R_Eye_b, Nose, Mouth, L_Eye, R_Eye)
@@ -418,16 +419,14 @@ class LANDMARK_MATCHING(LANDMARK_points):
         
         # WOAMN
         if mode == 0:
-          assets = [self._landmarks.Asset_Face_contours, self._landmarks.Asset_left_eyes, self._landmarks.Asset_right_eyes, self._landmarks.Asset_left_eyes_b, self._landmarks.Asset_right_eyes_b, self._landmarks.Asset_nose, self._landmarks.Asset_mouths]
+          assets = [self._landmarks.Asset_w_Face_contours, self._landmarks.Asset_w_left_eyes, self._landmarks.Asset_w_right_eyes, self._landmarks.Asset_w_left_eyes_b, self._landmarks.Asset_w_right_eyes_b, self._landmarks.Asset_w_nose, self._landmarks.Asset_w_mouths]
+          transforms = [self._landmarks.Asset_w_nose_transform, self._landmarks.Asset_w_left_eyes_transform, self._landmarks.Asset_w_right_eyes_transform, self._landmarks.Asset_w_left_eyes_b_transform, self._landmarks.Asset_w_right_eyes_b_transform, self._landmarks.Asset_w_mouths_transform]
         # MAN
         else:
-          assets = [self._landmarks.Asset_Face_contours, self._landmarks.Asset_left_eyes, self._landmarks.Asset_right_eyes, self._landmarks.Asset_left_eyes_b, self._landmarks.Asset_right_eyes_b, self._landmarks.Asset_nose, self._landmarks.Asset_mouths]
-        
-        print('-'*50)
-        print(angle)
-        print('-'*50)
-        
-        return self.TotalResult(assets, inputs)
+          assets = [self._landmarks.Asset_m_Face_contours, self._landmarks.Asset_m_left_eyes, self._landmarks.Asset_m_right_eyes, self._landmarks.Asset_m_left_eyes_b, self._landmarks.Asset_m_right_eyes_b, self._landmarks.Asset_m_nose, self._landmarks.Asset_m_mouths]
+          transforms = [self._landmarks.Asset_m_nose_transform, self._landmarks.Asset_m_left_eyes_transform, self._landmarks.Asset_m_right_eyes_transform, self._landmarks.Asset_m_left_eyes_b_transform, self._landmarks.Asset_m_right_eyes_b_transform, self._landmarks.Asset_m_mouths_transform]
+                
+        return self.TotalResult(assets, inputs, transforms)
     else:
         return [], []
 
@@ -602,11 +601,11 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 if __name__ == "__main__":
-  id = 2
+  id = 1
   input_image = cv2.imread(f"{id}.png")
   #input_image = cv2.imread("1.png")
 
   land = LANDMARK_MATCHING()
   input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)  
   #land.makeDatabase(input_image, id)
-  land.landmark_part_matching(input_image)
+  land.landmark_part_matching(0, input_image)
