@@ -376,11 +376,11 @@ class LANDMARK_MATCHING(LANDMARK_points):
         rad, angle= self.GetRadian(input_image, points[4], points[8])
         
         for id, lm in enumerate(points):
-          #if abs(angle) > 5.0:
-          #  p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
-          #  (x, y) = (int(p[0]), int(p[1]))
-          #else:
-          (x, y) = (lm[0], lm[1])
+          if abs(angle) > 5.0:
+            p = self.RotatePoint(np.array((int(iw/2), int(ih/2))), [lm[0] - self.anchorX , lm[1] - self.anchorY], -rad)
+            (x, y) = (int(p[0]), int(p[1]))
+          else:
+            (x, y) = (lm[0], lm[1])
             
           if id in self._landmarks.FACE_CONTOUR : 
             input_Face_contour.append((x,y))
