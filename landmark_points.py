@@ -6,12 +6,17 @@ class LANDMARK_points:
   def __init__(self):
 
     # 해당 ID의 file 명 정의
-    self.WOMAN_FACE_NAME = ['SHAPE_W_AT10_W10_W10_2']
-    #self.WOMAN_FACE_NAME = ['SHAPE_W_AT10_W10_W10_2', 'SHAPE_W_DM10_W10_W10_2', 'SHAPE_W_LO10_W10_W10_2', 'SHAPE_W_LR10_W10_W10_2', 'SHAPE_W_LS10_W10_W10_2', 'SHAPE_W_LV10_W10_W10_2', 'SHAPE_W_OV10_W10_W10_2', 'SHAPE_W_RO10_W10_W10_2',  'SHAPE_W_SQ10_W10_W10_2', 'SHAPE_W_VT10_W10_W10_2']
+    # WOMAN
+    #self.WOMAN_FACE_NAME = ['SHAPE_W_AT10_W10_W10_2']
+    self.WOMAN_FACE_NAME = ['SHAPE_W_AT10_W10_W10_2', 'SHAPE_W_DM10_W10_W10_2', 'SHAPE_W_LO10_W10_W10_2', 'SHAPE_W_LR10_W10_W10_2', 'SHAPE_W_LS10_W10_W10_2', 'SHAPE_W_LV10_W10_W10_2', 'SHAPE_W_OV10_W10_W10_2', 'SHAPE_W_RO10_W10_W10_2',  'SHAPE_W_SQ10_W10_W10_2', 'SHAPE_W_VT10_W10_W10_2']
     self.WOMAN_EYE_NAME = ['EYE_W_AU10_LCS', 'EYE_W_AU20_LCS', 'EYE_W_AU30_LCS', 'EYE_W_AU40_LCS', 'EYE_W_AU50_LCS', 'EYE_W_BE10_LCS', 'EYE_W_BE20_LCS', 'EYE_W_BE30_LCS', 'EYE_W_BE40_LCS', 'EYE_W_BE50_LCS', 'EYE_W_BE60_LCS', 'EYE_W_BE70_LCS', 'EYE_W_BE80_LCS', 'EYE_W_BE90_LCS', 'EYE_W_BF10_LCS', 'EYE_W_BF20_LCS', 'EYE_W_BF30_LCS', 'EYE_W_BF40_LCS', 'EYE_W_BF50_LCS', 'EYE_W_BF60_LCS', 'EYE_W_BF70_LCS', 'EYE_W_LE10_LCS', 'EYE_W_LE20_LCS', 'EYE_W_LE30_LCS', 'EYE_W_LE40_LCS', 'EYE_W_LE50_LCS', 'EYE_W_LE60_LCS', 'EYE_W_LE70_LCS', 'EYE_W_LE80_LCS', 'EYE_W_LE90_LCS', 'EYE_W_ND10_LCS', 'EYE_W_ND20_LCS', 'EYE_W_ND30_LCS', 'EYE_W_ND40_LCS', 'EYE_W_ND50_LCS', 'EYE_W_ND60_LCS', 'EYE_W_ND70_LCS', 'EYE_W_ND80_LCS', 'EYE_W_RE10_LCS', 'EYE_W_RE20_LCS', 'EYE_W_RE30_LCS', 'EYE_W_RE40_LCS', 'EYE_W_RE50_LCS']
     self.WOMAN_EYE_BROW_NAME = ['BROW_W_FL06', 'BROW_W_HA06', 'BROW_W_LW06', 'BROW_W_RH06', 'BROW_W_RL06', 'BROW_W_RM06', 'BROW_W_SF06', 'BROW_W_SH06', 'BROW_W_SL06', 'BROW_W_SM06', 'BROW_W_SS06', 'BROW_W_ST06']
     self.WOMAN_MOUTH_NAME = ['LIP_W_BW10', 'LIP_W_BW20', 'LIP_W_BW30', 'LIP_W_BW40', 'LIP_W_DL10', 'LIP_W_DL20', 'LIP_W_FL10', 'LIP_W_FL20', 'LIP_W_FL30', 'LIP_W_FL40', 'LIP_W_HL10', 'LIP_W_HL20', 'LIP_W_HL30', 'LIP_W_HL40', 'LIP_W_HL50', 'LIP_W_HL60', 'LIP_W_HS10', 'LIP_W_HS20', 'LIP_W_HS30', 'LIP_W_HS40', 'LIP_W_HS50', 'LIP_W_HU10', 'LIP_W_HU20', 'LIP_W_HU30', 'LIP_W_RO10', 'LIP_W_RO20', 'LIP_W_RO30', 'LIP_W_TN10', 'LIP_W_TN20', 'LIP_W_TN30', 'LIP_W_TN40', 'LIP_W_TN50']
     self.WOMAN_NOSE_NAME = ['NOSE_W_WN02', 'NOSE_W_WN04', 'NOSE_W_WN06', 'NOSE_W_WN08', 'NOSE_W_WN10', 'NOSE_W_WN12', 'NOSE_W_WN14', 'NOSE_W_WN16', 'NOSE_W_WN18', 'NOSE_W_WN20', 'NOSE_W_WN22', 'NOSE_W_WN24', 'NOSE_W_WN26', 'NOSE_W_WN28', 'NOSE_W_WN30', 'NOSE_W_WN32', 'NOSE_W_WN34', 'NOSE_W_WN36', 'NOSE_W_WN38', 'NOSE_W_WN40', 'NOSE_W_WN42', 'NOSE_W_WN44', 'NOSE_W_WN46']
+    
+    
+    
+    
 
      # Total Landmark
     ############################################################################################################################################################################################################
@@ -86,9 +91,10 @@ class LANDMARK_points:
 
 
 
-
+  # woman 0 man 1
   def Transform_load(self, file):
-    with open('data/' + file + '.csv', 'rU') as data:
+    file_w = 'W_' + file
+    with open('data/' + file_w + '.csv', 'rU') as data:
       reader = csv.reader(data)
       for row in reader:
         if file == 'TRANSFORM_LEFT_EYE' : self.Asset_w_left_eyes_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
@@ -98,15 +104,27 @@ class LANDMARK_points:
         elif file == 'TRANSFORM_NOSE' : self.Asset_w_nose_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
         elif file == 'TRANSFORM_LIP' : self.Asset_w_mouths_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
 
-  def Facial_feature_load(self, file):
-    with open('data/' + file + '.csv', 'rU') as data:
+    file_m = 'M_' + file
+    with open('data/' + file_m + '.csv', 'rU') as data:
       reader = csv.reader(data)
       for row in reader:
-        test = [] 
+        if file == 'TRANSFORM_LEFT_EYE' : self.Asset_m_left_eyes_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_RIGHT_EYE' : self.Asset_m_right_eyes_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_LEFT_EYE_BROW' : self.Asset_m_left_eyes_b_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_RIGHT_EYE_BROW' : self.Asset_m_right_eyes_b_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_NOSE' : self.Asset_m_nose_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+        elif file == 'TRANSFORM_LIP' : self.Asset_m_mouths_transform.append([float(row[0]), float(row[1]), float(row[2]), float(row[3]), float(row[4])])
+
+  def Facial_feature_load(self, mode, file):
+    file_w = 'W_' + file
+    with open('data/' + file_w + '.csv', 'rU') as data:
+      reader = csv.reader(data)
+      for row in reader:
+        test = []
         for rr in range(len(row)):
           temp = row[rr].split(",")
           temp[0] = temp[0].split("(")[1]
-          temp[1] = temp[1].split(")")[0]              
+          temp[1] = temp[1].split(")")[0]
           test.append((float(temp[0]), float(temp[1])))
         if file == 'LEFT_EYE' : self.Asset_w_left_eyes.append(test)
         elif file == 'RIGHT_EYE' : self.Asset_w_right_eyes.append(test)
@@ -114,12 +132,37 @@ class LANDMARK_points:
         elif file == 'RIGHT_EYE_BROW' : self.Asset_w_right_eyes_b.append(test)
         elif file == 'NOSE' : self.Asset_w_nose.append(test)
         elif file == 'LIP' : self.Asset_w_mouths.append(test)
+    file_m = 'M_' + file
+    with open('data/' + file_m + '.csv', 'rU') as data:
+      reader = csv.reader(data)
+      for row in reader:
+        test = []
+        for rr in range(len(row)):
+          temp = row[rr].split(",")
+          temp[0] = temp[0].split("(")[1]
+          temp[1] = temp[1].split(")")[0]
+          test.append((float(temp[0]), float(temp[1])))
+        if file == 'LEFT_EYE' : self.Asset_m_left_eyes.append(test)
+        elif file == 'RIGHT_EYE' : self.Asset_m_right_eyes.append(test)
+        elif file == 'LEFT_EYE_BROW' : self.Asset_m_left_eyes_b.append(test)
+        elif file == 'RIGHT_EYE_BROW' : self.Asset_m_right_eyes_b.append(test)
+        elif file == 'NOSE' : self.Asset_m_nose.append(test)
+        elif file == 'LIP' : self.Asset_m_mouths.append(test)
 
   def Face_contour_load(self, file):
-    with open('data/' + file + '.csv', 'rU') as data:
+    file_w = 'W_' + file
+    with open('data/' + file_w + '.csv', 'rU') as data:
       reader = csv.reader(data)
       for row in reader:
         self.Asset_w_Face_contours.append((float(row[0]), float(row[1])))
+        
+        
+              
+    file_m = 'M_' + file
+    with open('data/' + file_m + '.csv', 'rU') as data:
+      reader = csv.reader(data)
+      for row in reader:
+        self.Asset_m_Face_contours.append((float(row[0]), float(row[1])))
 
 
 
