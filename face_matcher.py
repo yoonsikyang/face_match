@@ -504,6 +504,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 if __name__ == "__main__":
+  mode = 1
   id = 0
   input_image = cv2.imread(f"{id}.png")
   #input_image = cv2.imread("1.png")
@@ -511,4 +512,25 @@ if __name__ == "__main__":
   land = LANDMARK_MATCHING()
   input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)  
   #land.makeDatabase(input_image, id)
-  land.landmark_part_matching(0, input_image)
+  res, transform  = land.landmark_part_matching(mode, input_image)
+
+  # Make json result
+  # TODO add rotation, scale, translation value
+  data = []
+  for i, num in enumerate(res):
+      if mode == 0:
+          if i == 0: asset_name = land._landmarks.WOMAN_FACE_NAME[num]
+          elif i == 1 or i == 2: asset_name = land._landmarks.WOMAN_EYE_BROW_NAME[num]
+          elif i == 3: asset_name = land._landmarks.WOMAN_NOSE_NAME[num]
+          elif i == 4: asset_name = land._landmarks.WOMAN_MOUTH_NAME[num]
+          else: asset_name = land._landmarks.WOMAN_EYE_NAME[num]
+      else:
+          if i == 0: asset_name = land._landmarks.MAN_FACE_NAME[num]
+          elif i == 1 or i == 2: asset_name = land._landmarks.MAN_EYE_BROW_NAME[num]
+          elif i == 3: asset_name = land._landmarks.MAN_NOSE_NAME[num]
+          elif i == 4: asset_name = land._landmarks.MAN_MOUTH_NAME[num]
+          else: asset_name = land._landmarks.MAN_EYE_NAME[num]
+
+      data.append({"type":int(i), "asset_name":asset_name, "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":transform[i][3], "v_trans":transform[i][4]})
+
+  print ({'status': 'success' , 'data': data})
