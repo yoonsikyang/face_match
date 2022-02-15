@@ -214,7 +214,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
     elif mode == 'NOSE': input_pts = np.array([input_[6], input_[24], input_[26], input_[56]]) 
     elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[7], input_[21], input_[50]])
 
-
+    
     input_bbox = BoundingBox(input_)
     input_angle = self.getAngle_Dist_2P(input_pts[0], input_pts[2])
 
@@ -271,7 +271,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 
-  def TotalResult(self, assets, inputs, transforms, ih ,iw):
+  def TotalResult(self, assets, inputs, transforms):
       Face_contour_ID = 0 #, _ = self.landmark_pointSet_matching(assets[0], inputs[0])
       _, res_l_eye = self.landmark_pointSet_matching(assets[1], inputs[1])
       _, res_r_eye = self.landmark_pointSet_matching(assets[2], inputs[2])      
@@ -302,27 +302,45 @@ class LANDMARK_MATCHING(LANDMARK_points):
       
       Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform(face_bbox, inputs[1], transforms[1][Eye_ID], 'LEFT_EYE')
       Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform(face_bbox, inputs[2], transforms[2][Eye_ID], 'RIGHT_EYE')
+      if min(abs(h_trans_l), abs(h_trans_r)) == abs(h_trans_l):
+        h_trans = h_trans_l
+      else:
+        h_trans = h_trans_r
+
+      if min(abs(v_trans_l), abs(v_trans_r)) == abs(v_trans_l):
+        v_trans = v_trans_l
+      else:
+        v_trans = v_trans_r
 
       if Angle_l < Angle_r:
-        self.value_to_list(L_Eye, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, ((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
-        self.value_to_list(R_Eye, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
+        self.value_to_list(L_Eye, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
+        self.value_to_list(R_Eye, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
       else:
-        self.value_to_list(L_Eye, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
-        self.value_to_list(R_Eye, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, ((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
+        self.value_to_list(L_Eye, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
+        self.value_to_list(R_Eye, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
 
       Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform(face_bbox, inputs[3], transforms[3][Eye_B_ID], 'LEFT_EYE_B')
       Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform(face_bbox, inputs[4], transforms[4][Eye_B_ID], 'RIGHT_EYE_B')
+      if min(abs(h_trans_l), abs(h_trans_r)) == abs(h_trans_l):
+        h_trans = h_trans_l
+      else:
+        h_trans = h_trans_r
+
+      if min(abs(v_trans_l), abs(v_trans_r)) == abs(v_trans_l):
+        v_trans = v_trans_l
+      else:
+        v_trans = v_trans_r
 
       if Angle_l < Angle_r:
-        self.value_to_list(L_Eye_b, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, ((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
-        self.value_to_list(R_Eye_b, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
+        self.value_to_list(L_Eye_b, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
+        self.value_to_list(R_Eye_b, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
       else:
-        self.value_to_list(L_Eye_b, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
-        self.value_to_list(R_Eye_b, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, ((h_trans_l + h_trans_r)/2) / iw, ((v_trans_l + v_trans_r) /2)/ih)
+        self.value_to_list(L_Eye_b, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
+        self.value_to_list(R_Eye_b, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
 
 
       Angle, h_scale, v_scale, h_trans, v_trans  = self.get_transform(face_bbox, inputs[6], transforms[5][Mouth_ID], 'MOUTH')
-      self.value_to_list(Mouth, 0, h_scale, v_scale, 0, v_trans / ih)
+      self.value_to_list(Mouth, 0, h_scale, v_scale, 0, v_trans)
       
       transform_ = (Face_contour, L_Eye_b, R_Eye_b, Nose, Mouth, L_Eye, R_Eye)
       
@@ -389,7 +407,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
           assets = [self._landmarks.Asset_m_Face_contours, self._landmarks.Asset_m_left_eyes, self._landmarks.Asset_m_right_eyes, self._landmarks.Asset_m_left_eyes_b, self._landmarks.Asset_m_right_eyes_b, self._landmarks.Asset_m_nose, self._landmarks.Asset_m_mouths]
           transforms = [self._landmarks.Asset_m_nose_transform, self._landmarks.Asset_m_left_eyes_transform, self._landmarks.Asset_m_right_eyes_transform, self._landmarks.Asset_m_left_eyes_b_transform, self._landmarks.Asset_m_right_eyes_b_transform, self._landmarks.Asset_m_mouths_transform]
 
-        return self.TotalResult(assets, inputs, transforms, ih ,iw)
+        return self.TotalResult(assets, inputs, transforms)
     else:
         return [], []
 
