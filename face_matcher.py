@@ -199,14 +199,22 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
   def get_transform(self, face_bbox, input_, asset_transform, mode):
-
+    """
     if mode == 'LEFT_EYE': input_pts = np.array([input_[2], input_[6], input_[14], input_[29]]) 
     elif mode == 'RIGHT_EYE': input_pts = np.array([input_[2], input_[6], input_[14], input_[20]]) 
     elif mode == 'LEFT_EYE_B': input_pts = np.array([input_[2], input_[5], input_[6], input_[8]]) 
     elif mode == 'RIGHT_EYE_B': input_pts = np.array([input_[1], input_[4], input_[6], input_[8]])
     elif mode == 'NOSE': input_pts = np.array([input_[6], input_[24], input_[26], input_[56]]) 
     elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[7], input_[21], input_[50]])
+    """
+    if mode == 'LEFT_EYE': input_pts = np.array([input_[2], input_[6], input_[14], input_[29]]) 
+    elif mode == 'RIGHT_EYE': input_pts = np.array([input_[2], input_[6], input_[14], input_[20]]) 
+    elif mode == 'LEFT_EYE_B': input_pts = np.array([input_[3], input_[6], input_[7], input_[8]]) 
+    elif mode == 'RIGHT_EYE_B': input_pts = np.array([input_[3], input_[6], input_[7], input_[8]])
+    elif mode == 'NOSE': input_pts = np.array([input_[6], input_[24], input_[26], input_[56]]) 
+    elif mode == 'MOUTH': input_pts = np.array([input_[0], input_[7], input_[21], input_[50]])
 
+    
     input_bbox = BoundingBox(input_)
     input_angle = self.getAngle_Dist_2P(input_pts[0], input_pts[2])
 
@@ -499,7 +507,8 @@ class LANDMARK_MATCHING(LANDMARK_points):
 
 
 if __name__ == "__main__":
-  mode = 0
+  mode = 1
+
   id = 0
   input_image = cv2.imread(f"{id}.png")
   #input_image = cv2.imread("1.png")
