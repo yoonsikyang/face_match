@@ -313,11 +313,11 @@ class LANDMARK_MATCHING(LANDMARK_points):
         v_trans = v_trans_r
 
       if Angle_l < Angle_r:
-        self.value_to_list(L_Eye, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
-        self.value_to_list(R_Eye, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
+        self.value_to_list(L_Eye, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
+        self.value_to_list(R_Eye, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
       else:
-        self.value_to_list(L_Eye, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
-        self.value_to_list(R_Eye, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
+        self.value_to_list(L_Eye, -Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, h_trans, v_trans)
+        self.value_to_list(R_Eye, Angle_r, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -h_trans, v_trans)
 
       Angle_l, h_scale_l, v_scale_l, h_trans_l, v_trans_l = self.get_transform(face_bbox, inputs[3], transforms[3][Eye_B_ID], 'LEFT_EYE_B')
       Angle_r, h_scale_r, v_scale_r, h_trans_r, v_trans_r = self.get_transform(face_bbox, inputs[4], transforms[4][Eye_B_ID], 'RIGHT_EYE_B')
