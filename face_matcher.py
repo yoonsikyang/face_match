@@ -314,7 +314,9 @@ class LANDMARK_MATCHING(LANDMARK_points):
       elif (v_trans_l + v_trans_r)/2 < MIN_TRANSFORM:
         v_trans_l, v_trans_r = -MIN_TRANSFORM, -MIN_TRANSFORM
 
+      b_in = False
       if Angle_l < Angle_r:
+        b_in = True
         self.value_to_list(L_Eye, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
         self.value_to_list(R_Eye, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -(h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
       else:
@@ -334,7 +336,7 @@ class LANDMARK_MATCHING(LANDMARK_points):
       elif (v_trans_l + v_trans_r)/2 < MIN_TRANSFORM:
         v_trans_l, v_trans_r = -MIN_TRANSFORM, -MIN_TRANSFORM
 
-      if Angle_l < Angle_r:
+      if b_in:
         self.value_to_list(L_Eye_b, Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, (h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
         self.value_to_list(R_Eye_b, -Angle_l, (h_scale_l + h_scale_r) /2, (v_scale_l + v_scale_r)/2, -(h_trans_l + h_trans_r)/2, (v_trans_l + v_trans_r) /2)
       else:
