@@ -14,7 +14,7 @@ from face_matcher import LANDMARK_MATCHING
 
 class PartInfo(BaseModel):
     type: int 
-    asset_id :int
+    asset_name:str
     rotation:float
     h_scale:float
     v_scale:float
@@ -54,6 +54,8 @@ async def process(mode, img):
             else: asset_name = detector._landmarks.MAN_EYE_NAME[num]
 
         data.append({"type":int(i), "asset_name":asset_name, "rotation":transform[i][0], "h_scale":transform[i][1], "v_scale":transform[i][2], "h_trans":transform[i][3], "v_trans":transform[i][4]})
+    
+    print(data)
 
     return {'status': 'success', 'message': 'image received. size={}x{}'.format(img.shape[1], img.shape[0]) , 'data': json.dumps(data)}
 
@@ -75,7 +77,7 @@ async def processFace(mode:int, image: bytes = File(...)):
 @app.post("/finalize")
 async def finalize(data:List[PartInfo]):
     for d in data:
-        print(f'{d.type} {d.asset_id} {d.rotation} {d.h_scale} {d.v_scale} {d.h_trans} {d.v_trans}')
+        print(f'{d.type} {d.asset_name} {d.rotation} {d.h_scale} {d.v_scale} {d.h_trans} {d.v_trans}')
 
     # TODO store finalized values
     
